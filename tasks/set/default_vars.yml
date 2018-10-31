@@ -1,0 +1,24 @@
+---
+- name: Set os_architecture
+  set_fact:
+    os_architecture: |-
+      {%- if ansible_os_family == "Windows" %}
+      Windows
+      {%- else %}
+      Unix
+      {%- endif %}
+
+- name: Define OS architecture-specific defaults & variables
+  include_vars: "{{ os_architecture }}/vars.yml"
+  when: os_architecture in ['Unix']
+
+- name: Define OS family-specific defaults & variables
+  include_vars: "{{ ansible_os_family }}/vars.yml"
+
+# code from https://www.samdarwin.com/ansible-default-vars/
+- name: Set facts using any 'default_XXX' vars
+  set_fact:
+    "{{ item[8:] }}": "{{  vars[item[8:]] | default(vars[item]) }}"
+  when: item is match("^default_")
+  with_items:
+    "{{ vars }}"

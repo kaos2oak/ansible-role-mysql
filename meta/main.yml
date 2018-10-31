@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: kaos2oak
+  description: Install MySQL
+
+  license: license (MIT)
+
+  min_ansible_version: 2.6
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+
+  galaxy_tags:
+    - java
+    - jdk
+    - oracle
+
+dependencies: []

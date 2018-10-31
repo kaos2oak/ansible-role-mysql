@@ -1,0 +1,28 @@
+---
+# - name: Define OS family-specific environment variables
+#   include_tasks: "{{ ansible_os_family }}/env_vars.yml"
+
+- name: Define Linux environment variables
+  include_tasks: Linux/env_vars.yml
+  when: ansible_os_family not in ['Windows', 'Darwin']
+
+- name: Set mysql_version from MYSQL_VERSION
+  set_fact:
+    mysql_version: "{{ lookup('env', 'MYSQL_VERSION' ) }}"
+  when: |-
+    lookup('env', 'MYSQL_VERSION' ) is defined and
+    lookup('env', 'MYSQL_VERSION' ) != ''
+
+- name: Set general mysql_installers_path from MYSQL_INSTALLERS_PATH
+  set_fact:
+    mysql_installers_path: "{{ lookup('env', 'MYSQL_INSTALLERS_PATH' ) }}"
+  when: |-
+    mysql_installers_path is not defined and
+    (lookup('env', 'MYSQL_INSTALLERS_PATH' ) is defined and
+     lookup('env', 'MYSQL_INSTALLERS_PATH' ) != ''
+    )
+
+- name: Set mysql_installers_path_on_controller to mysql_installers_path
+  set_fact:
+    mysql_installers_path_on_controller: "{{ mysql_installers_path }}"
+  when: mysql_installers_path is defined and mysql_installers_path != ''

@@ -1,0 +1,7 @@
+---
+- name: Set mysql_installers_path to MYSQL_LINUX_INSTALLERS_PATH
+  set_fact:
+    mysql_installers_path: "{{ lookup('env', 'MYSQL_LINUX_INSTALLERS_PATH' ) }}"
+  when: |-
+    lookup('env', 'MYSQL_LINUX_INSTALLERS_PATH' ) is defined and
+    lookup('env', 'MYSQL_LINUX_INSTALLERS_PATH' ) != ''

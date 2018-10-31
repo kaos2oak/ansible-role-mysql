@@ -1,0 +1,4 @@
+---
+- include_tasks: set/facts.yml
+
+- include_tasks: log/test_vars.yml

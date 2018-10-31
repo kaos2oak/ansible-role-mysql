@@ -1,0 +1,6 @@
+---
+- name: Define defaults & variables
+  include_tasks: default_vars.yml
+
+- name: Define values based on environment variables
+  include_tasks: env_vars.yml
