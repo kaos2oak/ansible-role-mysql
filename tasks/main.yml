@@ -1,4 +1,7 @@
 ---
 - include_tasks: set/facts.yml
-
+- include_tasks: ensure/mysql/installed.yml
+- include_tasks: ensure/mysql/configured.yml
+- include_tasks: ensure/mysql/running.yml
+- include_tasks: report/state.yml
 - include_tasks: log/test_vars.yml

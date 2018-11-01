@@ -4,3 +4,10 @@
 
 - name: Define values based on environment variables
   include_tasks: env_vars.yml
+
+- name: Define mysql_version
+  include_tasks: mysql_version/modern.yml
+
+- name: Define OS family specific variables
+  include_tasks: "{{ ansible_os_family }}/vars.yml"
+  when: ansible_os_family in ['Debian']

@@ -7,7 +7,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def get_mysql_version():
-    return os.getenv('MYSQL_VERSION', '8.0.12')
+    return os.getenv('MYSQL_VERSION', '8.0.13')
 
 
 def get_mysql_installer_filename(host):
@@ -53,3 +53,8 @@ def test_mysql_installer_filename_fact(host, test_vars):
         test_vars['mysql_installer_filename']
     assert f.exists
     assert f.contains(mysql_installer_filename_string)
+
+
+def test_java_version_installed(host, test_vars):
+    result = host.run("mysql --version")
+    assert test_vars['mysql_version'] in result.stdout

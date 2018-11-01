@@ -1,0 +1,11 @@
+---
+
+- name: Ensure MySQL config options
+  lineinfile:
+    dest: "{{ mysql_config_filepath }}"
+    regexp: "^{{ item.option }}="
+    line: "{{ item.option }}={{ item.value }}"
+    insertafter: '^\[{{ item.section }}\]'
+  with_items:
+    - { section: mysqld, option: default-authentication-plugin, value: mysql_native_password }
+  become: true

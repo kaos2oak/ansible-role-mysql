@@ -1,2 +1,4 @@
 ---
 default_mysql_installer_filename: mysql-apt-config_0.8.10-1_all.deb
+default_mysql_repo_codename: bionic
+default_mysql_debian_config_filepath: /etc/mysql/mysql.conf.d/mysqld.cnf

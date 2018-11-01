@@ -1,0 +1,19 @@
+---
+# - name: Set password questions
+#   set_fact:
+#     mysql_password_question: 'mysql-community-server'
+#     mysql_root_password_question: 'root-pass'
+#     mysql_root_password_confirmation_question: 're-root-pass'
+
+- name: Set MySQL authentication plugin string
+  set_fact:
+    mysql_authentication_config_string: |-
+      {% if mysql_authentication_plugin == 'mysql_native_password' -%}
+      Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)
+      {%- else -%}
+      Use Strong Password Encryption (RECOMMENDED)
+      {%- endif %}
+
+- name: Set mysql_config_filepath
+  set_fact:
+    mysql_config_filepath: '{{ mysql_debian_config_filepath }}'
