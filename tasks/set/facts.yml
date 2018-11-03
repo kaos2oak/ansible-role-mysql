@@ -10,4 +10,4 @@
 
 - name: Define OS family specific variables
   include_tasks: "{{ ansible_os_family }}/vars.yml"
-  when: ansible_os_family in ['Debian']
+  when: ansible_os_family in ['Debian','RedHat']

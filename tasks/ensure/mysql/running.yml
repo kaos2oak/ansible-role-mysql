@@ -1,13 +1,13 @@
 ---
 - name: Ensure MySQL daemon is stopped
   service:
-    name: mysql
+    name: '{{ mysql_daemon }}'
     state: stopped
   become: true
 
 - name: Ensure MySQL daemon is running
   service:
-    name: mysql
+    name: '{{ mysql_daemon }}'
     state: started
     enabled: true
   become: true

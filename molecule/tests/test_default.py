@@ -14,8 +14,14 @@ def get_mysql_installer_filename(host):
     os = host.system_info.distribution
     if os.lower() in ['ubuntu', 'debian']:
         mysql_installer_filename = 'mysql-apt-config_0.8.10-1_all.deb'
+    elif os.lower() in ['centos', 'rhel', 'red hat enterprise linux server']:
+        release = host.system_info.release
+        if release.startswith('7'):
+            mysql_installer_filename = 'mysql80-community-release-el7-1.noarch.rpm'
+        else:
+            mysql_installer_filename = 'mysql80-community-release-el6-1.noarch.rpm'
     else:
-        mysql_installer_filename = 'unknown'
+        mysql_installer_filename = 'unknown-' + os
     return mysql_installer_filename
 
 

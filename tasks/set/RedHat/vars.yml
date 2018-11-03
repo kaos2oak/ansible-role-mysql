@@ -1,0 +1,12 @@
+---
+- name: Set mysql_config_filepath
+  set_fact:
+    mysql_config_filepath: '{{ mysql_redhat_config_filepath }}'
+
+- name: Set mysql_daemon
+  set_fact:
+    mysql_daemon: '{{ mysql_redhat_daemon }}'
+
+- name: Set mysql_installer_filename
+  set_fact:
+    mysql_installer_filename: '{{ mysql_installer_filenames[ansible_distribution_major_version] }}'

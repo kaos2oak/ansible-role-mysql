@@ -1,0 +1,25 @@
+---
+- name: Add MySQL Repo
+  yum:
+    name: '{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}'
+    state: present
+  become: true
+
+- name: Install yum-config-manager
+  yum:
+    name: yum-utils
+    state: installed
+  become: true
+
+- name: Install MySQL
+  yum:
+    name: mysql-community-server
+    state: installed
+  become: true
+  register: mysql_install
+
+- name: Install MySQL-python library
+  yum:
+    name: MySQL-python
+    state: installed
+  become: true

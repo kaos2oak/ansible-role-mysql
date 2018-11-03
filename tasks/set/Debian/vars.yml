@@ -1,10 +1,4 @@
 ---
-# - name: Set password questions
-#   set_fact:
-#     mysql_password_question: 'mysql-community-server'
-#     mysql_root_password_question: 'root-pass'
-#     mysql_root_password_confirmation_question: 're-root-pass'
-
 - name: Set MySQL authentication plugin string
   set_fact:
     mysql_authentication_config_string: |-
@@ -17,3 +11,7 @@
 - name: Set mysql_config_filepath
   set_fact:
     mysql_config_filepath: '{{ mysql_debian_config_filepath }}'
+
+- name: Set mysql_daemon
+  set_fact:
+    mysql_daemon: '{{ mysql_debian_daemon }}'
