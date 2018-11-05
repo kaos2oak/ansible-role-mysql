@@ -23,12 +23,14 @@
   set_fact:
     mysql_version_short_string: "{{ mysql_version_parts['major'] }}.{{ mysql_version_parts['minor'] }}"
 
+- name: Set mysql_version_regex
+  set_fact:
+    mysql_version_regex: '{{ mysql_version_string | replace(".", "\.") }}'
+
 - name: DEBUG - MySQL version string
   debug:
     msg: "MySQL version: {{ mysql_version_string }}"
-    verbosity: 2
 
 - name: DEBUG - MySQL short version string
   debug:
     msg: "MySQL short version: {{ mysql_version_short_string }}"
-    verbosity: 2

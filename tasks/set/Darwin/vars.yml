@@ -1,0 +1,12 @@
+---
+- name: Set mysql_config_filepath
+  set_fact:
+    mysql_config_filepath: '{{ mysql_darwin_config_filepath }}'
+
+- name: Set mysql_destination_path
+  set_fact:
+    mysql_destination_path: '{{ mysql_darwin_destination_path }}'
+
+- name: Set mysql_daemon
+  set_fact:
+    mysql_daemon: '{{ mysql_darwin_daemon }}'

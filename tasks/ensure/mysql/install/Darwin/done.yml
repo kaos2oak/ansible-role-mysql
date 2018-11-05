@@ -1,0 +1,63 @@
+---
+- name: Mount disk image containing installer (Darwin)
+  shell: "hdiutil attach -noautoopen -noverify
+    '{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}'
+    | grep /Volumes | cut -f 3"
+  register: mount_dmg_results
+
+- name: DEBUG - mount_dmg_results
+  debug:
+    msg: '{{ mount_dmg_results }}'
+
+- name: Set mysql_mounted_volume_path
+  set_fact:
+    mysql_mounted_volume_path: '{{ mount_dmg_results.stdout }}'
+
+# - name: Define regex pattern
+#   set_fact:
+#     mounted_volume_regex_string: "^mysql.*"
+
+# - name: DEBUG - mounted_volume_regex_string
+#   debug:
+#     msg: '{{ mounted_volume_regex_string }}'
+
+# - name: Find possible mounted volume names
+#   find:
+#     paths: /Volumes
+#     recurse: false
+#   register: found_dirs
+
+# - name: DEBUG - mounted volumes
+#   debug:
+#     msg: '{{ found_dirs }}'
+
+# - name: Set mysql_mounted_volume_path
+#   set_fact:
+#     mysql_mounted_volume_path: '{{ (found_dirs.files | last).path }}'
+
+- name: Find possible package names in mysql_mounted_volume_path
+  find:
+    paths: '{{ mysql_mounted_volume_path }}'
+    recurse: false
+    # patterns: "^mysql-{{ mysql_version_regex }}-.+\\.pkg"
+  register: found_pkgs
+
+- name: DEBUG - packages
+  debug:
+    msg: '{{ found_pkgs }}'
+
+- name: Set mysql_installer_package_path
+  set_fact:
+    mysql_installer_package_path: '{{ (found_pkgs.files | last).path }}'
+
+- name: Install MySQL
+  become: true
+  command: "installer -pkg \"{{ mysql_installer_package_path }}\" -target /"
+  register: mysql_install
+
+- name: Unmount disk image
+  command: "hdiutil detach \"{{ mysql_mounted_volume_path }}\""
+
+- name: Add mysql to path
+  become: true
+  command: "sh -c \"echo '{{ mysql_darwin_destination_path }}' >> /etc/paths\""
