@@ -1,3 +1,4 @@
 ---
-- name: Verify MySQL version
-  include_tasks: "{{ os_architecture }}/mysql_version.yml"
+- name: Verify MySQL Linux version
+  include_tasks: Unix/mysql_version.yml
+  when: ansible_os_family in ['Debian', 'RedHat', 'Darwin']

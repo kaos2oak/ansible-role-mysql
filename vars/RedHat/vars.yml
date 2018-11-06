@@ -1,7 +1,8 @@
 ---
 default_mysql_allow_simple_passwords: true
 default_mysql_redhat_config_filepath: /etc/my.cnf
-default_mysql_redhat_daemon: mysqld
+default_mysql_redhat_service_name: mysqld
+default_mysql_redhat_executable_path: /usr/bin
 
 default_mysql_installer_filenames:
   '7': mysql80-community-release-el7-1.noarch.rpm

@@ -1,7 +1,7 @@
 ---
 default_mysql_darwin_config_filepath: /etc/my.cnf
-default_mysql_darwin_destination_path: /usr/local/mysql/bin
-default_mysql_darwin_daemon: /usr/local/mysql/support-files/mysql.server
+default_mysql_darwin_executable_path: /usr/local/mysql/bin
+default_mysql_darwin_launchdaemon_filepath: /Library/LaunchDaemons/com.oracle.oss.mysql.mysqld.plist
 
 default_mysql_installer_name_prefix: mysql
 default_mysql_installer_name_insert: macos
