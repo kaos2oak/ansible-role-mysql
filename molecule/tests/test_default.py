@@ -20,6 +20,7 @@ def get_mysql_exec_path(host):
 
 def get_mysql_installer_filename(host):
     os = host.system_info.distribution
+    mysql_version = get_mysql_version()
     if os.lower() in ['ubuntu', 'debian']:
         mysql_installer_filename = 'mysql-apt-config_0.8.10-1_all.deb'
     elif os.lower() in ['centos', 'rhel', 'red hat enterprise linux server']:
@@ -29,7 +30,7 @@ def get_mysql_installer_filename(host):
         else:
             mysql_installer_filename = 'mysql80-community-release-el6-1.noarch.rpm'
     elif os == 'Mac OS X':
-        mysql_installer_filename = 'mysql-8.0.13-macos10.14-x86_64.dmg'
+        mysql_installer_filename = 'mysql-' + mysql_version + '-macos10.'
     else:
         mysql_installer_filename = 'unknown-' + os
     return mysql_installer_filename
