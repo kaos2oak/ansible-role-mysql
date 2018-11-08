@@ -10,7 +10,7 @@
     state: present
   become: true
 
-- name: Add software-properties-common (for add-apt-repository command) (Debian)
+- name: Add software-properties-common (Debian)
   apt:
     pkg: software-properties-common
     state: present
@@ -22,13 +22,7 @@
     state: present
   become: true
 
-- name: Ensure debconf-utils is installed (Debian)
-  apt:
-    pkg: debconf-utils
-    state: present
-  become: true
-
-- name: Set mysql_python_package
+- name: Set mysql_python_package (Debian)
   set_fact:
     mysql_python_package: |-
       {% if 'python3' in ansible_python_interpreter | default('') -%}
@@ -44,15 +38,6 @@
     force: true
   become: true
 
-- name: Install MySQL APT Repository (Debian)
-  shell: "DEBIAN_FRONTEND=noninteractive dpkg -i {{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}"
-  become: true
-
-- name: Update apt cache (Debian)
-  apt:
-    update_cache: true
-  become: true
-
 - name: Pre-configure debconf settings (Debian)
   debconf:
     name: '{{ item.name }}'
@@ -61,28 +46,30 @@
     vtype: '{{ item.vtype }}'
   become: true
   with_items:
+    - { vtype: 'string', name: 'mysql-apt-config', question: 'mysql-apt-config/tools-component', answer: 'mysql-tools'}
+    - { vtype: 'note', name: 'mysql-apt-config', question: 'mysql-apt-config/dmr-warning', answer: ''}
+    - { vtype: 'string', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-url', answer: 'http://repo.mysql.com/apt'}
+    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-preview', answer: 'Disabled' }
+    - { vtype: 'string', name: 'mysql-apt-config', question: 'mysql-apt-config/preview-component', answer: ''}
     - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/unsupported-platform', answer: 'abort' }
     - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-distro', answer: 'ubuntu' }
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-codename', answer: "{{ mysql_repo_codename }}" }
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-tools', answer: '' }
+    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-codename', answer: "{{ mysql_repo_codenames[ansible_distribution_major_version] }}" }
+    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-tools', answer: 'Enabled' }
     - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-server', answer: "mysql-{{ mysql_version_short_string }}" }
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-product', answer: 'Apply' }
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/enable-repo', answer: "mysql-{{ mysql_version_short_string }}" }
+    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-product', answer: 'Ok' }
     - { vtype: 'select', name: 'mysql-community-server', question: 'mysql-server/default-auth-override', answer: 'Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)' }
     - { vtype: 'password', name: 'mysql-community-server', question: 'mysql-community-server/root-pass', answer: "{{ mysql_root_password }}" }
     - { vtype: 'password', name: 'mysql-community-server', question: 'mysql-community-server/re-root-pass', answer: "{{ mysql_root_password }}" }
 
-- name: debconf status
-  shell: 'debconf-get-selections | grep mysql'
-  register: output
+- name: Install MySQL APT Repository (Debian)
+  shell: "DEBIAN_FRONTEND=noninteractive dpkg -i \
+    {{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}"
   become: true
 
-- name: Debug debconf status
-  vars:
-    msg: |
-      {{ output.stdout | trim }}
-  debug:
-    msg: "{{ msg.split('\n')[:-1] }}"
+- name: Update apt cache (Debian)
+  apt:
+    update_cache: true
+  become: true
 
 - name: Install MySQL (Debian)
   apt:
@@ -91,40 +78,3 @@
     force: true
   become: true
   register: mysql_install
-
-- name: debconf status
-  shell: 'debconf-get-selections | grep mysql'
-  register: output
-  become: true
-
-- name: Debug debconf status
-  vars:
-    msg: |
-      {{ output.stdout | trim }}
-  debug:
-    msg: "{{ msg.split('\n')[:-1] }}"
-
-# - debug:
-#     msg: "{{ mysql_install }}"
-
-# - name: Share status
-#   command: 'ls -la /usr/share/mysql-8.0/'
-#   register: share
-
-# - name: Debug share status
-#   debug:
-#     msg: "{{ share }}"
-
-# - name: Service status
-#   command: service mysql status
-#   register: output
-
-# - name: Debug service status
-#   debug:
-#     msg: "{{ output.stdout }}"
-
-# - name: Ensure MySQL daemon is running (Debian)
-#   service:
-#     name: mysql
-#     state: started
-#     enabled: true

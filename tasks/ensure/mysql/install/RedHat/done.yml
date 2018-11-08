@@ -11,6 +11,16 @@
     state: installed
   become: true
 
+- name: Disable default subrepository
+  shell: 'yum-config-manager --disable mysql80-community'
+  become: true
+
+- name: Enable version-specific subrepository
+  shell: "yum-config-manager --enable \
+    mysql{{ mysql_version_parts['major']|string }}\
+    {{ mysql_version_parts['minor']|string }}-community"
+  become: true
+
 - name: Install MySQL
   yum:
     name: mysql-community-server

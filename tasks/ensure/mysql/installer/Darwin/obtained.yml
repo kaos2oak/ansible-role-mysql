@@ -14,6 +14,7 @@
     patterns: '{{ regex_string }}'
     use_regex: true
   register: found_files
+  failed_when: found_files.files | length == 0
   delegate_to: 127.0.0.1
 
 - name: Set mysql_installer_filename
