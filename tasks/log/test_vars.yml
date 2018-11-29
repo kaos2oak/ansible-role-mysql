@@ -1,3 +1,4 @@
 ---
-- name: Include OS architecture specific tasks
-  include_tasks: "{{ os_architecture }}/test_vars.yml"
+- name: Log Unix specific test variable values
+  include_tasks: "Unix/test_vars.yml"
+  when: ansible_os_family not in ['Windows']

@@ -9,11 +9,11 @@
 - name: Log mysql_version for testing (Unix)
   lineinfile:
     path: "{{ mysql_installers_path_on_target }}/vars_log.txt"
-    line: "mysql_version={{ mysql_version }}"
+    line: "mysql_version={{ mysql_version | default('unknown') }}"
     create: true
 
 - name: Log mysql_installer_filename for testing (Unix)
   lineinfile:
     path: "{{ mysql_installers_path_on_target }}/vars_log.txt"
-    line: "mysql_installer_filename={{ mysql_installer_filename }}"
+    line: "mysql_installer_filename={{ mysql_installer_filename | default('unknown') }}"
     create: true

@@ -1,0 +1,19 @@
+---
+# - name: Install dotnet4.5.2
+#   win_chocolatey:
+#     name: dotnet4.5.2
+#     state: present
+#     # when: mysql_version_parts['major'] | int < 8
+
+# - name: Install vcredist2013
+#   win_chocolatey:
+#     name: vcredist2013
+#     state: present
+#   when: mysql_version_parts['major'] | int < 8
+
+# - name: Install vcredist2015
+#   win_chocolatey:
+#     name: vcredist2015
+#     state: present
+#   ignore_errors: true
+#   when: mysql_version_parts['major'] | int >= 8

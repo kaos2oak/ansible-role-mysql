@@ -1,0 +1,16 @@
+---
+- name: Create temp Ansible directory (Windows)
+  win_file:
+    path: "{{ mysql_installers_path_on_target }}"
+    state: directory
+
+- name: Copy installer to target (Windows)
+  win_copy:
+    src: "{{ mysql_installers_path_on_controller }}/{{ mysql_installer_filename }}"
+    dest: "{{ mysql_installers_path_on_target }}\\{{ mysql_installer_filename }}"
+
+- name: Check for installer (Windows)
+  win_stat:
+    path: "\"{{ mysql_installers_path_on_target }}\\{{ mysql_installer_filename }}\""
+  register: installer
+  failed_when: installer.stat.exists != true

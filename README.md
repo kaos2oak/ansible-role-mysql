@@ -97,6 +97,12 @@ macOS 10.13, 10.12, 10.11 via vagrant:
 
     molecule test --scenario-name macos-vagrant
 
+### Windows Tests
+
+Window 2012r2 via vagrant:
+
+    molecule test --scenario-name windows-vagrant
+
 ## Docker Space Issues
 
 If you find that your drive space is disappearing, you may want to refer to

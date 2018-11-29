@@ -1,8 +1,8 @@
 ---
 - name: Ensure MySQL Linux installer has been obtained
   include_tasks: Linux/obtained.yml
-  when: ansible_os_family not in ['Windows', 'Darwin']
+  when: ansible_os_family not in ['Darwin', 'Windows']
 
 - name: Ensure MySQL OS family specific installer has been obtained
   include_tasks: '{{ ansible_os_family }}/obtained.yml'
-  when: ansible_os_family in ['Darwin']
+  when: ansible_os_family in ['Darwin', 'Windows']

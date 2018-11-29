@@ -1,0 +1,21 @@
+---
+- name: Ensure MySQL configuration file exists
+  win_template:
+    src: templates/my.conf.j2
+    dest: "{{ mysql_config_filepath }}"
+
+- name: Ensure MySQL config sections exist
+  win_lineinfile:
+    dest: "{{ mysql_config_filepath }}"
+    line: '[{{ item }}]'
+  with_items:
+    - mysqld
+
+- name: Ensure MySQL config options are defined
+  win_lineinfile:
+    dest: "{{ mysql_config_filepath }}"
+    regexp: "^{{ item.option }}="
+    line: "{{ item.option }}={{ item.value }}"
+    insertafter: '^\[{{ item.section }}\]'
+  with_items:
+    - { section: mysqld, option: default-authentication-plugin, value: '{{ mysql_authentication_plugin }}' }
