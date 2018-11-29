@@ -1,8 +1,0 @@
----
-- name: Ensure MySQL Linux is running
-  include_tasks: service/Linux/running.yml
-  when: ansible_os_family in ['Debian', 'RedHat']
-
-- name: Ensure MySQL OS family specific is running
-  include_tasks: 'service/{{ ansible_os_family }}/running.yml'
-  when: ansible_os_family in ['Darwin']

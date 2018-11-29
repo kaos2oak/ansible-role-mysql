@@ -1,8 +1,0 @@
----
-- name: Ensure MySQL service is stopped
-  shell: 'launchctl unload -F {{ mysql_darwin_launchdaemon_filepath }}'
-  become: true
-
-- name: Ensure MySQL service is started
-  shell: 'launchctl load -F {{ mysql_darwin_launchdaemon_filepath }}'
-  become: true

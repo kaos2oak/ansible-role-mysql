@@ -10,6 +10,10 @@ def get_mysql_version():
     return os.getenv('MYSQL_VERSION', '8.0.13')
 
 
+def get_mysql_root_password():
+    return os.getenv('MYSQL_ROOT_PASSWORD', 'root')
+
+
 def get_mysql_exec_path(host):
     os = host.system_info.distribution
     if os == 'Mac OS X':
@@ -49,6 +53,7 @@ def test_vars(host):
     test_vars = {
         'mysql_version': get_mysql_version(),
         'mysql_installer_filename': get_mysql_installer_filename(host),
+        'mysql_root_password': get_mysql_root_password(),
         'path_separator': get_path_separator(),
         'temp_dir': get_temp_dir()
     }
@@ -72,7 +77,14 @@ def test_mysql_installer_filename_fact(host, test_vars):
     assert f.contains(mysql_installer_filename_string)
 
 
-def test_java_version_installed(host, test_vars):
+def test_mysql_version_installed(host, test_vars):
     mysql_exec_path = get_mysql_exec_path(host)
     result = host.run(mysql_exec_path + " --version")
+    assert test_vars['mysql_version'] in result.stdout
+
+
+def test_root_mysql_user(host, test_vars):
+    mysql_exec_path = get_mysql_exec_path(host)
+    result = host.run(mysql_exec_path + " -u root -p" +
+                      test_vars['mysql_root_password'] + " -e \"SELECT VERSION();\"")
     assert test_vars['mysql_version'] in result.stdout

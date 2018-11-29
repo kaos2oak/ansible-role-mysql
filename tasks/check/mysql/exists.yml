@@ -1,0 +1,8 @@
+---
+- name: Check for existing MySQL installation
+  include_tasks: "{{ os_architecture }}/exists.yml"
+
+- name: Set mysql_needs_to_be_installed
+  set_fact:
+    mysql_needs_to_be_installed: true
+  when: mysql_installed.stat.exists == false

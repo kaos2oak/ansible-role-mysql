@@ -29,4 +29,13 @@
 
 - name: Add mysql to /etc/paths
   become: true
-  command: "sh -c \"echo '{{ mysql_darwin_executable_path }}' >> /etc/paths\""
+  command: "sh -c \"echo '{{ mysql_executable_path }}' >> /etc/paths\""
+
+- name: Initialize the MySQL data directory
+  become: true
+  command: "{{ mysql_executable_path }}/mysqld --initialize-insecure --user={{ mysql_os_user }}"
+  when: mysql_version_parts['major'] | int > 5
+
+- name: Ensure MySQL service is started
+  become: true
+  shell: '{{ mysql_start_command }}'

@@ -25,5 +25,5 @@
 
 - name: Set mysql_installers_path_on_controller to mysql_installers_path
   set_fact:
-    mysql_installers_path_on_controller: "{{ mysql_installers_path }}"
+    mysql_installers_path_on_controller: '{{ mysql_installers_path }}'
   when: mysql_installers_path is defined and mysql_installers_path != ''

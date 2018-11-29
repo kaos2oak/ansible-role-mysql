@@ -1,0 +1,8 @@
+---
+- name: Ensure MySQL Linux is restarted
+  include_tasks: service/Linux/restarted.yml
+  when: ansible_os_family in ['Debian', 'RedHat']
+
+- name: Ensure MySQL OS family specific is restarted
+  include_tasks: 'service/{{ ansible_os_family }}/restarted.yml'
+  when: ansible_os_family in ['Darwin', 'Windows']

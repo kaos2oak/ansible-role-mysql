@@ -1,11 +1,15 @@
 ---
-- name: Define regex pattern
+- name: Define regex pattern for installer filename
   set_fact:
     regex_string: "^{{ mysql_installer_name_prefix }}\
     -{{ mysql_version_regex }}\
     -{{ mysql_installer_name_insert }}10\\.\\d+\
     -{{ mysql_installer_name_suffix }}\
     \\.dmg"
+
+- name: DEBUG - regex pattern for installer filename
+  debug:
+    msg: '{{ regex_string }}'
 
 - name: Find possible installer filenames
   find:
@@ -21,13 +25,22 @@
   set_fact:
     mysql_installer_filename: '{{ (found_files.files | last).path | basename }}'
 
-- name: Copy installer to target (Darwin)
-  copy:
-    src: "{{ mysql_installers_path_on_controller }}/{{ mysql_installer_filename }}"
-    dest: "{{ mysql_installers_path_on_target }}"
-
-- name: Check for installer (Darwin)
+- name: Check for installer on target (Darwin)
   stat:
     path: "{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}"
   register: installer
-  failed_when: installer.stat.exists != true
+
+- block:
+
+    - name: Copy installer to target (Darwin)
+      copy:
+        src: "{{ mysql_installers_path_on_controller }}/{{ mysql_installer_filename }}"
+        dest: "{{ mysql_installers_path_on_target }}"
+
+    - name: Check for installer on target (Darwin)
+      stat:
+        path: "{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}"
+      register: installer
+      failed_when: installer.stat.exists != true
+
+  when: installer.stat.exists != true
