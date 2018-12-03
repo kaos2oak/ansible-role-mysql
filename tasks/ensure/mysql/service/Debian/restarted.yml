@@ -5,7 +5,7 @@
     state: stopped
   become: true
 
-- name: Ensure MySQL service is running
+- name: Ensure MySQL service is started
   service:
     name: '{{ mysql_service_name }}'
     state: started

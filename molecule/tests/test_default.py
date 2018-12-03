@@ -62,23 +62,6 @@ def test_vars(host):
     return test_vars
 
 
-def test_mysql_version_fact(host, test_vars):
-    f = host.file(test_vars['temp_dir'] +
-                  test_vars['path_separator'] + 'vars_log.txt')
-    mysql_version_string = 'mysql_version=' + test_vars['mysql_version']
-    assert f.exists
-    assert f.contains(mysql_version_string)
-
-
-def test_mysql_installer_filename_fact(host, test_vars):
-    f = host.file(test_vars['temp_dir'] +
-                  test_vars['path_separator'] + 'vars_log.txt')
-    mysql_installer_filename_string = 'mysql_installer_filename=' + \
-        test_vars['mysql_installer_filename']
-    assert f.exists
-    assert f.contains(mysql_installer_filename_string)
-
-
 def test_mysql_version_installed(host, test_vars):
     mysql_exec_path = get_mysql_exec_path(host)
     result = host.run(mysql_exec_path + " --version")

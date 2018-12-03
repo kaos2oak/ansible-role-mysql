@@ -10,6 +10,7 @@
 - name: DEBUG - regex pattern for installer filename
   debug:
     msg: '{{ regex_string }}'
+    verbosity: 2
 
 - name: Find possible installer filenames
   find:

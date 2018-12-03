@@ -53,7 +53,7 @@
     - { vtype: 'string', name: 'mysql-apt-config', question: 'mysql-apt-config/preview-component', answer: ''}
     - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/unsupported-platform', answer: 'abort' }
     - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-distro', answer: 'ubuntu' }
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-codename', answer: "{{ mysql_repo_codenames[ansible_distribution_major_version] }}" }
+    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-codename', answer: "{{ mysql_repo_codenames[ansible_facts.distribution_major_version] }}" }
     - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-tools', answer: 'Enabled' }
     - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-server', answer: "mysql-{{ mysql_version_short_string }}" }
     - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-product', answer: 'Ok' }

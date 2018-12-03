@@ -1,16 +1,4 @@
 ---
-- name: Set mysql_config_filepath
-  set_fact:
-    mysql_config_filepath: '{{ mysql_redhat_config_filepath }}'
-
-- name: Set mysql_executable_path
-  set_fact:
-    mysql_executable_path: '{{ mysql_redhat_executable_path }}'
-
-- name: Set mysql_service_name
-  set_fact:
-    mysql_service_name: '{{ mysql_redhat_service_name }}'
-
 - name: Set mysql_installer_filename
   set_fact:
-    mysql_installer_filename: '{{ mysql_installer_filenames[ansible_distribution_major_version] }}'
+    mysql_installer_filename: '{{ mysql_installer_filenames[ansible_facts.distribution_major_version] }}'

@@ -4,12 +4,12 @@
 
 - block:
 
-  - include_tasks: ensure/pre-reqs/exist.yml
-  - include_tasks: ensure/mysql/installed.yml
+  - include_tasks: ensure/mysql/pre-reqs/exist.yml
+  - include_tasks: ensure/mysql/installer/obtained.yml
+  - include_tasks: ensure/mysql/installation/done.yml
   - include_tasks: ensure/mysql/authentication/set_up.yml
-  - include_tasks: ensure/mysql/configured.yml
-  - include_tasks: ensure/mysql/restarted.yml
-  - include_tasks: log/test_vars.yml
+  - include_tasks: ensure/mysql/configuration/defined.yml
+  - include_tasks: ensure/mysql/service/restarted.yml
 
   when: mysql_needs_to_be_installed | default(false) | bool
 

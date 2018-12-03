@@ -2,15 +2,15 @@
 
 Install MySQL
 
-This role is designed to install MySQL Community Edition.
+This role is designed to install MySQL Community Edition. The role works with
+version 8 and 5.7 and may work with 5.6, but has not been extensively tested
+on all possible versions.
 
 ## Requirements
 
 This role is currently designed to be used with a MySQL installer downloaded
-from the [MySQL web site](https://www.mysql.com).
-
-Currently, this role has only been tested with the version set as default
-(8.0.13).
+from the [MySQL web site](https://www.mysql.com) and placed locally on your
+"controller" (the machine from which you are running the Ansible playbook).
 
 If you are running Ansible 2.4 or above on macOS High Sierra or above, you may
 want to learn more about an issue with "changes made in High Sierra that are
@@ -28,7 +28,129 @@ tests with vagrant:
 
         export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
+## Environment Variables
 
+| Option                          | Default | Example                                  |
+| :------------------------------ | :------ | :--------------------------------------- |
+| `MYSQL_LINUX_INSTALLERS_PATH`   | none    | `/Users/Shared/Installers/Linux/MySQL`   |
+| `MYSQL_MACOS_INSTALLERS_PATH`   | none    | `/Users/Shared/Installers/macOS/MySQL`   |
+| `MYSQL_WINDOWS_INSTALLERS_PATH` | none    | `/Users/Shared/Installers/Windows/MySQL` |
+| `MYSQL_INSTALLERS_PATH`         | none    | `/Users/Shared/Installers/MySQL`         |
+| `MYSQL_VERSION`                 | none    | `8.0.13` or `5.7.24    `                 |
+
+## Role Variables
+
+| Option                        | Default                    | Example                                                                                     |
+| :---------------------------- | :------------------------- | :------------------------------------------------------------------------------------------ |
+| `mysql_version`               | `8.0.13`                   | `5.7.24`                                                                                    |
+| `mysql_installers_path`       | `/Users/Shared/Installers` | `/Users/Shared/Installers/MySQL`                                                            |
+| `mysql_root_password`         | `root`                     | `rootp@ssW0rd`                                                                              |
+| `mysql_authentication_plugin` | `mysql_native_password`    | `caching_sha2_password`                                                                     |
+| `mysql_databases`             | none                       | `testdb`                                                                                    |
+| `mysql_users`                 | none                       | `- { name: 'testuser', host: 'localhost', password: 'testpass' }`                           |
+| `mysql_user_access`           | none                       | `- { name: 'testuser', host: 'localhost', access: 'ALL', database: 'testdb', tables: '*' }` |
+
+## Dependencies
+
+Installation of MySQL on Windows requires the appropriate Visual C++
+Redistributable for Visual Studio.  MySQL 5.7 requires 2013, while MySQL 8
+requires 2015.
+
+## Role Use
+
+Use of this role consists of the following:
+
+* Create a playbook
+* Obtain and have the desired installer available locally on the ansible
+  controller
+* Provide the location of the installer on the controller as an environment
+  variable, in the playbook or as an extra-var
+* Provide the version of MySQL (must match the installer) as an environment
+  variable, in the playbook or as an extra-var
+* Run the playbook
+
+### Example Playbooks
+
+``` yaml
+- name: Install MySQL
+    hosts: servers
+    roles:
+        - { role: kaos2oak.mysql }
+```
+
+``` yaml
+- name: Install MySQL 5.7.24
+    hosts: servers
+    vars:
+        mysql_version: '5.7.24'
+    roles:
+        - { role: kaos2oak.mysql }
+```
+
+``` yaml
+- name: Install MySQL 5.7.24 and create mydb
+    hosts: servers
+    vars:
+        mysql_version: '5.7.24'
+        mysql_root_password: W7HgBBja*ELuiGRrnuJ
+        mysql_databases:
+            - mydb
+        mysql_users:
+            - { name: 'myuser', host: 'localhost', password: 'TGhXAgWTK*yGHd2' }
+        mysql_user_access:
+            - { name: 'myuser', host: 'localhost', access: 'ALL', database: 'mydb', tables: '*' }
+    roles:
+        - { role: kaos2oak.mysql }
+```
+
+### Example Installer Locations
+
+If you really want it to be quick and easy:
+
+    export MYSQL_INSTALLERS_PATH="$HOME/Downloads"
+
+Or, you could always move the installers to the default location after
+downloading them:
+
+    /Users/Shared/Installers/MySQL
+
+If you like to keep things neat and organized, you might organize the installers
+into folders, create a file named something like `setup` in a directory named
+`my` in this repository (the `my` directory is part of the .gitignore, so it
+will not be part of any commit) and then `source` the file:
+
+``` shell
+# File: setup
+export MYSQL_MACOS_INSTALLERS_PATH="$HOME/Installers/Mac/MySQL"
+export MYSQL_LINUX_INSTALLERS_PATH="$HOME/Installers/Linux/MySQL"
+export MYSQL_WINDOWS_INSTALLERS_PATH="$HOME/Installers/Windows/MySQL"
+```
+
+    source my/setup
+
+### Example MySQL Version
+
+Since the MySQL version may be something that you want to change on the fly,
+you probably don't want to include it in the `setup` file, but you can always
+provide it on the command line before the ansible-playbook run:
+
+    export MYSQL_VERSION=5.7.24
+
+Or, provide as part of the ansible-playbook run (see below).
+
+### Example Playbook Runs
+
+Assuming you have created a playbook named `k2o-mysql.yml`:
+
+    ansible-playbook k2o-mysql.yml
+
+    MYSQL_VERSION=5.7.24 ansible-playbook k2o-mysql.yml
+
+    ansible-playbook k2o-mysql.yml -e "mysql_version=5.7.24"
+
+If the playbook itself contains the version of Java:
+
+    ansible-playbook k2o-mysql-5.7.24.yml
 
 ## Role Testing
 

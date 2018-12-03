@@ -9,5 +9,4 @@
   include_tasks: mysql_version/modern.yml
 
 - name: Define OS family specific variables
-  include_tasks: "{{ ansible_os_family }}/vars.yml"
-  # when: ansible_os_family in ['Debian', 'RedHat', 'Darwin', 'Windows']
+  include_tasks: "{{ ansible_facts.os_family }}/vars.yml"

@@ -1,6 +1,0 @@
----
-- name: Ensure MySQL installer is obtained
-  include_tasks: installer/obtained.yml
-
-- name: Ensure MySQL installation is done
-  include_tasks: 'installation/{{ ansible_os_family }}/done.yml'
