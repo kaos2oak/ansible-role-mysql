@@ -1,0 +1,8 @@
+---
+- name: Create MySQL users (Windows)
+  win_shell: |
+    $mySql = "{{ mysql_executable_path }}\mysql.exe"
+    $mySqlParams = '-u', 'root', '-p', '{{ mysql_root_password }}'
+    $mySqlCommand = "CREATE USER {{ item.name }}@{{ item.host }} IDENTIFIED BY '{{ item.password }}';"
+    Start-Process -FilePath $mySql -ArgumentList "$mySqlParams", '-e', "$mySqlCommand" -Wait -NoNewWindow
+  loop: '{{ mysql_users }}'

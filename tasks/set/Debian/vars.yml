@@ -7,15 +7,3 @@
       {%- else -%}
       Use Strong Password Encryption (RECOMMENDED)
       {%- endif %}
-
-- name: Set mysql_config_filepath
-  set_fact:
-    mysql_config_filepath: '{{ mysql_debian_config_filepath }}'
-
-- name: Set mysql_executable_path
-  set_fact:
-    mysql_executable_path: '{{ mysql_debian_executable_path }}'
-
-- name: Set mysql_service_name
-  set_fact:
-    mysql_service_name: '{{ mysql_debian_service_name }}'

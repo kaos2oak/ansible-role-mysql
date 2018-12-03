@@ -13,4 +13,7 @@
 
   when: mysql_needs_to_be_installed | default(false) | bool
 
+- include_tasks: ensure/mysql/databases/created.yml
+- include_tasks: ensure/mysql/users/created.yml
+- include_tasks: ensure/mysql/access/granted.yml
 - include_tasks: report/state.yml

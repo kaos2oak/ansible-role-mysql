@@ -1,0 +1,8 @@
+---
+- name: Grant MySQL database access to users (Windows)
+  win_shell: |
+    $mySql = "{{ mysql_executable_path }}\mysql.exe"
+    $mySqlParams = '-u', 'root', '-p', '{{ mysql_root_password }}'
+    $mySqlCommand = "GRANT {{ item.access }} ON {{ item.database }}.{{ item.tables }} TO {{ item.name }}@{{ item.host }};"
+    Start-Process -FilePath $mySql -ArgumentList "$mySqlParams", '-e', "$mySqlCommand" -Wait -NoNewWindow
+  loop: '{{ mysql_user_access }}'

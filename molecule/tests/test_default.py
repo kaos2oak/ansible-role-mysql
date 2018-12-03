@@ -55,7 +55,9 @@ def test_vars(host):
         'mysql_installer_filename': get_mysql_installer_filename(host),
         'mysql_root_password': get_mysql_root_password(),
         'path_separator': get_path_separator(),
-        'temp_dir': get_temp_dir()
+        'temp_dir': get_temp_dir(),
+        'mysql_database': 'moleculetestdb',
+        'mysql_user': 'moleculetestuser'
     }
     return test_vars
 
@@ -88,3 +90,17 @@ def test_root_mysql_user(host, test_vars):
     result = host.run(mysql_exec_path + " -u root -p" +
                       test_vars['mysql_root_password'] + " -e \"SELECT VERSION();\"")
     assert test_vars['mysql_version'] in result.stdout
+
+
+def test_mysql_database(host, test_vars):
+    mysql_exec_path = get_mysql_exec_path(host)
+    result = host.run(mysql_exec_path + " -u root -p" +
+                      test_vars['mysql_root_password'] + " -e \"SHOW DATABASES;\"")
+    assert test_vars['mysql_database'] in result.stdout
+
+
+def test_mysql_user(host, test_vars):
+    mysql_exec_path = get_mysql_exec_path(host)
+    result = host.run(mysql_exec_path + " -u root -p" +
+                      test_vars['mysql_root_password'] + " -e \"SELECT User FROM mysql.user;\"")
+    assert test_vars['mysql_user'] in result.stdout

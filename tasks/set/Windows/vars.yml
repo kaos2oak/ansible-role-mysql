@@ -18,4 +18,4 @@
 
 - name: Set mysql_executable_path
   set_fact:
-    mysql_executable_path: "{{ mysql_destination_path }}\\bin"
+    mysql_executable_path: '{{ mysql_destination_path }}\\bin'
