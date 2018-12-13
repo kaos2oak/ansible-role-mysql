@@ -1,7 +1,7 @@
 ---
 - name: Set mysql_installers_path (macOS)
   set_fact:
-    mysql_installers_path: "{{ lookup('env', 'MYSQL_MACOS_INSTALLERS_PATH' ) }}"
+    mysql_installers_path: "{{ lookup('env', 'MYSQL_MAC_LOCAL_INSTALLERS_PATH' ) }}"
   when: |-
-    lookup('env', 'MYSQL_MACOS_INSTALLERS_PATH' ) is defined and
-    lookup('env', 'MYSQL_MACOS_INSTALLERS_PATH' ) != ''
+    lookup('env', 'MYSQL_MAC_LOCAL_INSTALLERS_PATH' ) is defined and
+    lookup('env', 'MYSQL_MAC_LOCAL_INSTALLERS_PATH' ) != ''

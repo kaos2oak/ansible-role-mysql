@@ -7,9 +7,13 @@
   set_fact:
     mysql_destination_path: "C:\\Program Files\\MySQL\\MySQL Server {{ mysql_version_short_string }}"
 
+- name: Set mysql_data_path
+  set_fact:
+    mysql_data_path: "C:\\ProgramData\\MySQL\\MySQL Server {{ mysql_version_short_string }}"
+
 - name: Set mysql_config_filepath
   set_fact:
-    mysql_config_filepath: "{{ mysql_destination_path }}\\{{ mysql_config_file_name }}"
+    mysql_config_filepath: "{{ mysql_data_path }}\\{{ mysql_config_file_name }}"
 
 - name: Set mysql_service_name
   set_fact:
@@ -18,4 +22,4 @@
 
 - name: Set mysql_executable_path
   set_fact:
-    mysql_executable_path: '{{ mysql_destination_path }}\\bin'
+    mysql_executable_path: "{{ mysql_destination_path }}\\bin"

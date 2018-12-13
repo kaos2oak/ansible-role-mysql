@@ -1,26 +1,26 @@
 ---
 - name: Update apt cache (Debian)
+  become: true
   apt:
     update_cache: true
-  become: true
 
 - name: Ensure wget is installed (Debian)
+  become: true
   apt:
     pkg: wget
     state: present
-  become: true
 
 - name: Add software-properties-common (Debian)
+  become: true
   apt:
     pkg: software-properties-common
     state: present
-  become: true
 
 - name: Ensure apt-utils is installed (Debian)
+  become: true
   apt:
     pkg: apt-utils
     state: present
-  become: true
 
 - name: Set mysql_python_package (Debian)
   set_fact:
@@ -32,19 +32,19 @@
       {%- endif %}
 
 - name: Ensure mysql_python_package is installed (Debian)
+  become: true
   apt:
     pkg: '{{ mysql_python_package }}'
     state: present
     force: true
-  become: true
 
 - name: Pre-configure debconf settings (Debian)
+  become: true
   debconf:
     name: '{{ item.name }}'
     question: '{{ item.question }}'
     value: '{{ item.answer | quote }}'
     vtype: '{{ item.vtype }}'
-  become: true
   with_items:
     - { vtype: 'string', name: 'mysql-apt-config', question: 'mysql-apt-config/tools-component', answer: 'mysql-tools'}
     - { vtype: 'note', name: 'mysql-apt-config', question: 'mysql-apt-config/dmr-warning', answer: ''}
@@ -62,19 +62,18 @@
     - { vtype: 'password', name: 'mysql-community-server', question: 'mysql-community-server/re-root-pass', answer: "{{ mysql_root_password }}" }
 
 - name: Install MySQL APT Repository (Debian)
+  become: true
   shell: "DEBIAN_FRONTEND=noninteractive dpkg -i \
     {{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}"
-  become: true
 
 - name: Update apt cache (Debian)
+  become: true
   apt:
     update_cache: true
-  become: true
 
 - name: Install MySQL (Debian)
+  become: true
   apt:
     package: mysql-server
     state: present
     force: true
-  become: true
-  register: mysql_install

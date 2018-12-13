@@ -1,8 +1,4 @@
----
 - name: Create MySQL databases (Windows)
-  win_shell: |
-    $mySql = "{{ mysql_executable_path }}\mysql.exe"
-    $mySqlParams = '-u', 'root', '-p', '{{ mysql_root_password }}'
-    $mySqlCommand = "CREATE DATABASE {{ item }};"
-    Start-Process -FilePath $mySql -ArgumentList "$mySqlParams", '-e', "$mySqlCommand" -Wait -NoNewWindow
-  loop: '{{ mysql_databases }}'
+  win_command: "\"{{ mysql_executable_path }}\\mysql.exe\" -u root \
+    -p{{ mysql_root_password }} -e \"CREATE DATABASE IF NOT EXISTS {{ item }};\""
+  loop: "{{ mysql_databases }}"

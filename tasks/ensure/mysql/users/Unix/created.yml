@@ -1,4 +1,12 @@
 ---
+- name: Set password policy level (temporary)
+  shell: "mysql -u root -p'{{ mysql_root_password }}' -e 'SET GLOBAL {{ item }};'"
+  with_items:
+    "{{ mysql_password_policy_settings[mysql_version_parts['major']|string] }}"
+  when: |-
+    mysql_password_policy_settings is defined and
+    mysql_allow_simple_passwords
+
 - name: Create users
   shell: "{{ mysql_executable_path }}/mysql \
     -u root -p'{{ mysql_root_password }}' \

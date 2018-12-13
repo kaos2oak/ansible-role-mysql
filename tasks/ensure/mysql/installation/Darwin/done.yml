@@ -22,7 +22,6 @@
 - name: Install MySQL
   become: true
   command: "installer -pkg \"{{ mysql_installer_package_path }}\" -target /"
-  register: mysql_install
 
 - name: Unmount disk image
   command: "hdiutil detach \"{{ mysql_mounted_volume_path }}\""

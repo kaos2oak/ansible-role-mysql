@@ -30,13 +30,13 @@ tests with vagrant:
 
 ## Environment Variables
 
-| Option                          | Default | Example                                  |
-| :------------------------------ | :------ | :--------------------------------------- |
-| `MYSQL_LINUX_INSTALLERS_PATH`   | none    | `/Users/Shared/Installers/Linux/MySQL`   |
-| `MYSQL_MACOS_INSTALLERS_PATH`   | none    | `/Users/Shared/Installers/macOS/MySQL`   |
-| `MYSQL_WINDOWS_INSTALLERS_PATH` | none    | `/Users/Shared/Installers/Windows/MySQL` |
-| `MYSQL_INSTALLERS_PATH`         | none    | `/Users/Shared/Installers/MySQL`         |
-| `MYSQL_VERSION`                 | none    | `8.0.13` or `5.7.24    `                 |
+| Option                                | Default | Example                                  |
+| :------------------------------------ | :------ | :--------------------------------------- |
+| `MYSQL_LINUX_LOCAL_INSTALLERS_PATH`   | none    | `/Users/Shared/Installers/Linux/MySQL`   |
+| `MYSQL_MAC_LOCAL_INSTALLERS_PATH`     | none    | `/Users/Shared/Installers/macOS/MySQL`   |
+| `MYSQL_WINDOWS_LOCAL_INSTALLERS_PATH` | none    | `/Users/Shared/Installers/Windows/MySQL` |
+| `MYSQL_LOCAL_INSTALLERS_PATH`         | none    | `/Users/Shared/Installers/MySQL`         |
+| `MYSQL_VERSION`                       | none    | `8.0.13` or `5.7.24    `                 |
 
 ## Role Variables
 
@@ -107,7 +107,7 @@ Use of this role consists of the following:
 
 If you really want it to be quick and easy:
 
-    export MYSQL_INSTALLERS_PATH="$HOME/Downloads"
+    export MYSQL_LOCAL_INSTALLERS_PATH="$HOME/Downloads"
 
 Or, you could always move the installers to the default location after
 downloading them:
@@ -121,9 +121,9 @@ will not be part of any commit) and then `source` the file:
 
 ``` shell
 # File: setup
-export MYSQL_MACOS_INSTALLERS_PATH="$HOME/Installers/Mac/MySQL"
-export MYSQL_LINUX_INSTALLERS_PATH="$HOME/Installers/Linux/MySQL"
-export MYSQL_WINDOWS_INSTALLERS_PATH="$HOME/Installers/Windows/MySQL"
+export MYSQL_MAC_LOCAL_INSTALLERS_PATH="$HOME/Installers/Mac/MySQL"
+export MYSQL_LINUX_LOCAL_INSTALLERS_PATH="$HOME/Installers/Linux/MySQL"
+export MYSQL_WINDOWS_LOCAL_INSTALLERS_PATH="$HOME/Installers/Windows/MySQL"
 ```
 
     source my/setup

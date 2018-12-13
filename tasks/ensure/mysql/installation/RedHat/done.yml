@@ -1,35 +1,41 @@
 ---
 - name: Add MySQL Repo
+  become: true
   yum:
     name: '{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}'
     state: present
-  become: true
 
 - name: Install yum-config-manager
+  become: true
   yum:
     name: yum-utils
     state: installed
-  become: true
 
 - name: Disable default subrepository
-  shell: 'yum-config-manager --disable mysql80-community'
   become: true
+  shell: 'yum-config-manager --disable mysql80-community'
 
 - name: Enable version-specific subrepository
+  become: true
   shell: "yum-config-manager --enable \
     mysql{{ mysql_version_parts['major']|string }}\
     {{ mysql_version_parts['minor']|string }}-community"
-  become: true
 
 - name: Install MySQL
+  become: true
   yum:
     name: mysql-community-server
     state: installed
+
+- name: Ensure MySQL service is started
   become: true
-  register: mysql_install
+  service:
+    name: '{{ mysql_service_name }}'
+    state: started
+    enabled: true
 
 - name: Install MySQL-python library
+  become: true
   yum:
     name: MySQL-python
     state: installed
-  become: true

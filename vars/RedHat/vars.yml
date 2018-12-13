@@ -10,14 +10,16 @@ default_mysql_installer_filenames:
 
 default_mysql_password_policy_settings:
   '8':
-    - SET GLOBAL validate_password.check_user_name = OFF;
-    - SET GLOBAL validate_password.mixed_case_count = 0;
-    - SET GLOBAL validate_password.special_char_count = 0;
-    - SET GLOBAL validate_password.number_count = 0;
-    - SET GLOBAL validate_password.length = 0;
+    - validate_password_policy = LOW
+    - validate_password.check_user_name = OFF
+    - validate_password.mixed_case_count = 0
+    - validate_password.special_char_count = 0
+    - validate_password.number_count = 0
+    - validate_password.length = 0
   '5':
-    - SET GLOBAL validate_password_check_user_name = OFF;
-    - SET GLOBAL validate_password_mixed_case_count = 0;
-    - SET GLOBAL validate_password_special_char_count = 0;
-    - SET GLOBAL validate_password_number_count = 0;
-    - SET GLOBAL validate_password_length = 0;
+    - validate_password_policy = LOW
+    - validate_password_check_user_name = OFF
+    - validate_password_mixed_case_count = 0
+    - validate_password_special_char_count = 0
+    - validate_password_number_count = 0
+    - validate_password_length = 0

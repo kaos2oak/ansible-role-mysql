@@ -1,8 +1,12 @@
 ---
 - name: Create MySQL users (Windows)
-  win_shell: |
-    $mySql = "{{ mysql_executable_path }}\mysql.exe"
-    $mySqlParams = '-u', 'root', '-p', '{{ mysql_root_password }}'
-    $mySqlCommand = "CREATE USER {{ item.name }}@{{ item.host }} IDENTIFIED BY '{{ item.password }}';"
-    Start-Process -FilePath $mySql -ArgumentList "$mySqlParams", '-e', "$mySqlCommand" -Wait -NoNewWindow
-  loop: '{{ mysql_users }}'
+  win_command: "\"{{ mysql_executable_path }}\\mysql.exe\" -u root \
+    -p{{ mysql_root_password }} -e \
+    \"CREATE USER IF NOT EXISTS '{{ item.name }}'@'{{ item.host }}';\""
+  loop: "{{ mysql_users }}"
+
+- name: Assign password to MySQL users (Windows)
+  win_command: "\"{{ mysql_executable_path }}\\mysql.exe\" -u root \
+    -p{{ mysql_root_password }} -e \
+    \"SET PASSWORD FOR '{{ item.name }}'@'{{ item.host }}' = '{{ item.password }}';\""
+  loop: "{{ mysql_users }}"
