@@ -5,3 +5,4 @@
     -e 'GRANT {{ item.access }} ON {{ item.database }}.{{ item.tables }} \
     TO {{ item.name }}@{{ item.host }};'"
   loop: "{{ mysql_user_access }}"
+  changed_when: false
