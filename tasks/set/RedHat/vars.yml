@@ -1,4 +1,4 @@
 ---
-- name: Set mysql_installer_filename
+- name: Set mysql_installer_filename (RedHat)
   set_fact:
     mysql_installer_filename: '{{ mysql_installer_filenames[ansible_facts.distribution_major_version] }}'

@@ -11,7 +11,7 @@
     $mySqlOptions = "server;{{ mysql_version_string }};x64:*:type=config;openfirewall=true;generallog=true;binlog=true;enable_tcpip=true;rootpasswd={{ mysql_root_password }}"
     Start-Process -FilePath $mySqlInstallerConsole -ArgumentList community, install, -silent, "$mySqlOptions" -Wait -NoNewWindow
 
-- name: Ensure MySQL executable is added to PATH
+- name: Ensure MySQL executable is added to PATH (Windows)
   win_shell: |
     $theCurrentPath=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
     $theUpdatedPath=$theCurrentPath+';{{ mysql_executable_path }}'

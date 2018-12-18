@@ -1,5 +1,5 @@
 ---
-- name: Set MySQL authentication plugin string
+- name: Set MySQL authentication plugin string (Debian)
   set_fact:
     mysql_authentication_config_string: |-
       {% if mysql_authentication_plugin == 'mysql_native_password' -%}

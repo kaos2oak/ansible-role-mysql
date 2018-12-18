@@ -10,7 +10,7 @@ default_mysql_installer_filenames:
 
 default_mysql_password_policy_settings:
   '8':
-    - validate_password_policy = LOW
+    - validate_password.policy = LOW
     - validate_password.check_user_name = OFF
     - validate_password.mixed_case_count = 0
     - validate_password.special_char_count = 0

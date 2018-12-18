@@ -1,12 +1,12 @@
 ---
-- name: Ensure MySQL config sections exist
+- name: Ensure MySQL config sections exist (Windows)
   win_lineinfile:
     dest: "{{ mysql_config_filepath }}"
     line: '[{{ item }}]'
   with_items:
     - mysqld
 
-- name: Ensure MySQL config options are defined
+- name: Ensure MySQL config options are defined (Windows)
   win_lineinfile:
     dest: "{{ mysql_config_filepath }}"
     regexp: "^{{ item.option }}="

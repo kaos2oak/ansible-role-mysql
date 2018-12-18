@@ -1,5 +1,5 @@
 ---
-- name: Ensure MySQL config sections exist
+- name: Ensure MySQL config sections exist (Unix)
   lineinfile:
     dest: "{{ mysql_config_filepath }}"
     line: '[{{ item }}]'
@@ -8,7 +8,7 @@
     - mysqld
   become: true
 
-- name: Ensure MySQL config options
+- name: Ensure MySQL config options (Unix)
   lineinfile:
     dest: "{{ mysql_config_filepath }}"
     regexp: "^{{ item.option }}="

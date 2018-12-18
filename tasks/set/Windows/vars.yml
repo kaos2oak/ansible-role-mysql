@@ -3,23 +3,23 @@
   set_fact:
     mysql_installer_filename: 'mysql-installer-community-{{ mysql_version_string }}.0.msi'
 
-- name: Set mysql_destination_path
+- name: Set mysql_destination_path (Windows)
   set_fact:
     mysql_destination_path: "C:\\Program Files\\MySQL\\MySQL Server {{ mysql_version_short_string }}"
 
-- name: Set mysql_data_path
+- name: Set mysql_data_path (Windows)
   set_fact:
     mysql_data_path: "C:\\ProgramData\\MySQL\\MySQL Server {{ mysql_version_short_string }}"
 
-- name: Set mysql_config_filepath
+- name: Set mysql_config_filepath (Windows)
   set_fact:
     mysql_config_filepath: "{{ mysql_data_path }}\\{{ mysql_config_file_name }}"
 
-- name: Set mysql_service_name
+- name: Set mysql_service_name (Windows)
   set_fact:
     mysql_service_name: "mysql{{ mysql_version_parts['major']|string }}\
       {{ mysql_version_parts['minor']|string }}"
 
-- name: Set mysql_executable_path
+- name: Set mysql_executable_path (Windows)
   set_fact:
     mysql_executable_path: "{{ mysql_destination_path }}\\bin"

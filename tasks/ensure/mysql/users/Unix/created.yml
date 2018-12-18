@@ -1,5 +1,5 @@
 ---
-- name: Set password policy level (temporary)
+- name: Set temporary password policy level (Unix)
   shell: "mysql -u root -p'{{ mysql_root_password }}' -e 'SET GLOBAL {{ item }};'"
   with_items:
     "{{ mysql_password_policy_settings[mysql_version_parts['major']|string] }}"
@@ -7,7 +7,7 @@
     mysql_password_policy_settings is defined and
     mysql_allow_simple_passwords
 
-- name: Create users
+- name: Create users (Unix)
   shell: "{{ mysql_executable_path }}/mysql \
     -u root -p'{{ mysql_root_password }}' \
     -e 'CREATE USER {{ item.name }}@{{ item.host }} \

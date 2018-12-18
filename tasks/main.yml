@@ -4,10 +4,10 @@
 
 - block:
 
-  - include_tasks: ensure/mysql/pre-reqs/exist.yml
+  - include_tasks: ensure/mysql/prereqs/exist.yml
   - include_tasks: ensure/mysql/installer/obtained.yml
   - include_tasks: ensure/mysql/installation/done.yml
-  - include_tasks: ensure/mysql/authentication/set_up.yml
+  - include_tasks: ensure/mysql/root_auth/set_up.yml
   - include_tasks: ensure/mysql/configuration/defined.yml
   - include_tasks: ensure/mysql/service/restarted.yml
 

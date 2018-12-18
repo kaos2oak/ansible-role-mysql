@@ -1,5 +1,5 @@
 ---
-- name: Set mysql_installers_path (macOS)
+- name: Set mysql_installers_path (Darwin)
   set_fact:
     mysql_installers_path: "{{ lookup('env', 'MYSQL_MAC_LOCAL_INSTALLERS_PATH' ) }}"
   when: |-

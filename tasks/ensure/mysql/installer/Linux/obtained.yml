@@ -1,24 +1,24 @@
 ---
-- name: Ensure mysql_installers_path_on_target exists (Unix)
+- name: Ensure mysql_installers_path_on_target exists (Linux)
   file:
     path: "{{ mysql_installers_path_on_target }}"
     state: directory
     mode: 0777
   become: true
 
-- name: Check for installer in mysql_installers_path_on_controller (Unix)
+- name: Check for installer in mysql_installers_path_on_controller (Linux)
   stat:
     path: "{{ mysql_installers_path_on_controller }}/{{ mysql_installer_filename }}"
   register: mysql_installer_on_controller
   delegate_to: 127.0.0.1
 
-- name: Copy installer to target (Unix)
+- name: Copy installer to target (Linux)
   copy:
     src: "{{ mysql_installers_path_on_controller }}/{{ mysql_installer_filename }}"
     dest: "{{ mysql_installers_path_on_target }}"
   when: mysql_installer_on_controller.stat.exists == true
 
-- name: Check for installer (Unix)
+- name: Check for installer (Linux)
   stat:
     path: "{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}"
   register: installer

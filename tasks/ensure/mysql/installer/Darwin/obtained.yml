@@ -1,5 +1,5 @@
 ---
-- name: Define regex pattern for installer filename
+- name: Define regex pattern for installer filename (Darwin)
   set_fact:
     regex_string: "^{{ mysql_installer_name_prefix }}\
     -{{ mysql_version_regex }}\
@@ -7,12 +7,12 @@
     -{{ mysql_installer_name_suffix }}\
     \\.dmg"
 
-- name: DEBUG - regex pattern for installer filename
+- name: DEBUG - regex pattern for installer filename (Darwin)
   debug:
     msg: '{{ regex_string }}'
     verbosity: 2
 
-- name: Find possible installer filenames
+- name: Find possible installer filenames (Darwin)
   find:
     paths: '{{ mysql_installers_path_on_controller }}'
     recurse: false
@@ -22,7 +22,7 @@
   failed_when: found_files.files | length == 0
   delegate_to: 127.0.0.1
 
-- name: Set mysql_installer_filename
+- name: Set mysql_installer_filename (Darwin)
   set_fact:
     mysql_installer_filename: '{{ (found_files.files | last).path | basename }}'
 
