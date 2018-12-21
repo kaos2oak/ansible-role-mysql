@@ -10,6 +10,7 @@
   - include_tasks: ensure/mysql/root_auth/set_up.yml
   - include_tasks: ensure/mysql/configuration/defined.yml
   - include_tasks: ensure/mysql/service/restarted.yml
+  - include_tasks: ensure/mysql/root_auth_plug_in/set.yml
 
   when: mysql_needs_to_be_installed | default(false) | bool
 

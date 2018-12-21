@@ -1,10 +1,26 @@
-# MySQL
+# Kaos2oak MySQL
 
 Install MySQL
 
 This role is designed to install MySQL Community Edition. The role works with
-version 8 and 5.7 and may work with 5.6, but has not been extensively tested
-on all possible versions.
+version 8.0.13 and 5.7.24 and may work with 5.6.x, but has not been extensively
+tested on all possible major and minor versions.
+
+## Goal
+
+The initial goal for this role is to provide a method to provision macOS,
+Ubuntu, RedHat and Windows with MySQL using the same role, so that
+a single playbook may be used to provision all of these platforms for
+software testing.
+
+Important considerations before using this role:
+
+- no attempt to provide the security that would be necessary for a production
+  installation has been included
+- no attempt to download the necessary installers directly from the vendor
+  has been included (you must download them yourself)
+- the role is designed to be able to specify particular versions to be
+  installed, rather than simply "the latest"
 
 ## Requirements
 
@@ -23,12 +39,20 @@ Because of the above issue, you may want to include this line in your
 
     ENV["VAGRANT_OLD_ENV_OBJC_DISABLE_INITIALIZE_FORK_SAFETY"] = "YES"
 
-You may also need to run the following command prior to executing molecule
-tests with vagrant:
+Or, export this information before executing the role:
 
-        export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+    export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
+_Note: The provisioning of a Windows VM seems to be particularly sensitive to_
+_this._
 
 ## Environment Variables
+
+Variables that are particular to the environment from which you are running
+the playbook can be supplied as environment variables so that they can be
+"sourced" from a file in the environment.  This provides an easy way to
+supply different paths to resources if you are using the roles on different
+computers.
 
 | Option                                | Default | Example                                  |
 | :------------------------------------ | :------ | :--------------------------------------- |
@@ -40,12 +64,16 @@ tests with vagrant:
 
 ## Role Variables
 
+Variables that are targeted toward options to use during the execution of the
+roles are left to be specified as role variables and can be specified in the
+playbook itself or on the command line when running the playbook.
+
 | Option                        | Default                    | Example                                                                                     |
 | :---------------------------- | :------------------------- | :------------------------------------------------------------------------------------------ |
 | `mysql_version`               | `8.0.13`                   | `5.7.24`                                                                                    |
 | `mysql_installers_path`       | `/Users/Shared/Installers` | `/Users/Shared/Installers/MySQL`                                                            |
 | `mysql_root_password`         | `root`                     | `rootp@ssW0rd`                                                                              |
-| `mysql_authentication_plugin` | `mysql_native_password`    | `caching_sha2_password`                                                                     |
+| `mysql_authentication_plugin` | MySQL version dependent    | `mysql_native_password` or `caching_sha2_password`                                          |
 | `mysql_databases`             | none                       | `testdb`                                                                                    |
 | `mysql_users`                 | none                       | `- { name: 'testuser', host: 'localhost', password: 'testpass' }`                           |
 | `mysql_user_access`           | none                       | `- { name: 'testuser', host: 'localhost', access: 'ALL', database: 'testdb', tables: '*' }` |
@@ -54,29 +82,33 @@ tests with vagrant:
 
 Installation of MySQL on Windows requires the appropriate Visual C++
 Redistributable for Visual Studio.  MySQL 5.7 requires 2013, while MySQL 8
-requires 2015.
+requires 2015.  This role does not attempt to install these nor include a
+dependency that will install these.
 
 ## Role Use
 
 Use of this role consists of the following:
 
-* Create a playbook
-* Obtain and have the desired installer available locally on the ansible
+- Create a playbook
+- Obtain and have the desired installer available locally on the ansible
   controller
-* Provide the location of the installer on the controller as an environment
+- Provide the location of the installer on the controller as an environment
   variable, in the playbook or as an extra-var
-* Provide the version of MySQL (must match the installer) as an environment
+- Provide the version of MySQL (must match the installer) as an environment
   variable, in the playbook or as an extra-var
-* Run the playbook
+- Run the playbook
 
 ### Example Playbooks
 
 ``` yaml
-- name: Install MySQL
+- name: Install default MySQL
     hosts: servers
     roles:
         - { role: kaos2oak.mysql }
 ```
+
+_Note: See the `defaults.yml` file for the "default" MySQL version that will_
+_be installed by the above playbook._
 
 ``` yaml
 - name: Install MySQL 5.7.24
@@ -92,6 +124,24 @@ Use of this role consists of the following:
     hosts: servers
     vars:
         mysql_version: '5.7.24'
+        mysql_authentication_plugin: mysql_native_password
+        mysql_root_password: W7HgBBja*ELuiGRrnuJ
+        mysql_databases:
+            - mydb
+        mysql_users:
+            - { name: 'myuser', host: 'localhost', password: 'TGhXAgWTK*yGHd2' }
+        mysql_user_access:
+            - { name: 'myuser', host: 'localhost', access: 'ALL', database: 'mydb', tables: '*' }
+    roles:
+        - { role: kaos2oak.mysql }
+```
+
+``` yaml
+- name: Install MySQL 8.0.13, create mydb and use the mysql_native_password auth plugin
+    hosts: servers
+    vars:
+        mysql_version: '8.0.13'
+        mysql_authentication_plugin: mysql_native_password
         mysql_root_password: W7HgBBja*ELuiGRrnuJ
         mysql_databases:
             - mydb
@@ -109,15 +159,16 @@ If you really want it to be quick and easy:
 
     export MYSQL_LOCAL_INSTALLERS_PATH="$HOME/Downloads"
 
-Or, you could always move the installers to the default location after
-downloading them:
+Or, you could always move the installers to a more permanent default location
+after downloading them and then point to that location:
 
     /Users/Shared/Installers/MySQL
 
 If you like to keep things neat and organized, you might organize the installers
 into folders, create a file named something like `setup` in a directory named
-`my` in this repository (the `my` directory is part of the .gitignore, so it
-will not be part of any commit) and then `source` the file:
+`my` in this repository (most contents of the `my` directory are part of the
+.gitignore ignored files, so it will not be part of any commit) and then
+`source` the file:
 
 ``` shell
 # File: setup
@@ -136,7 +187,9 @@ provide it on the command line before the ansible-playbook run:
 
     export MYSQL_VERSION=5.7.24
 
-Or, provide as part of the ansible-playbook run (see below).
+Or, provide it as an "extra-vars" role variable for the ansible-playbook run:
+
+    -e "mysql_version=8.0.13"
 
 ### Example Playbook Runs
 
@@ -148,7 +201,7 @@ Assuming you have created a playbook named `k2o-mysql.yml`:
 
     ansible-playbook k2o-mysql.yml -e "mysql_version=5.7.24"
 
-If the playbook itself contains the version of Java:
+If the playbook itself contains the version of MySQL, it might look like:
 
     ansible-playbook k2o-mysql-5.7.24.yml
 
@@ -158,6 +211,9 @@ If the playbook itself contains the version of Java:
 
 [Molecule](https://molecule.readthedocs.io/en/latest/) is being used for
 testing this role.
+
+_Note: Windows testing with Molecule is not actively supported, so these tests_
+_may not work._
 
 You will need to install molecule and python support modules before running
 the role tests:
@@ -178,7 +234,7 @@ The 'verifier' for Windows is disabled as I have not yet been able to get the
 testinfra verfication to work for Windows. If you have any experience or advice
 in this area, please let me know.
 
-### MySQL Versions
+### MySQL Versions in Molecule tests
 
 To run the molecule tests for a particular MySQL version, you will need to
 provide the `MYSQL_VERSION` as an environment variable and ensure the installer
@@ -221,7 +277,7 @@ macOS 10.13, 10.12, 10.11 via vagrant:
 
 ### Windows Tests
 
-Window 2012r2 via vagrant:
+Window 2012r2 via vagrant (may not work):
 
     molecule test --scenario-name windows-vagrant
 

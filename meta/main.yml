@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: mysql
   author: kaos2oak
   description: Install MySQL
 

@@ -30,7 +30,19 @@
 - name: DEBUG - MySQL version string
   debug:
     msg: "MySQL version: {{ mysql_version_string }}"
+    verbosity: 2
 
 - name: DEBUG - MySQL short version string
   debug:
     msg: "MySQL short version: {{ mysql_version_short_string }}"
+    verbosity: 2
+
+- name: Set default mysql_authentication_plugin
+  set_fact:
+    mysql_authentication_plugin: |-
+      {%- if mysql_version_parts['major']|int > 5 %}
+      caching_sha2_password
+      {%- else %}
+      mysql_native_password
+      {%- endif %}
+  when: mysql_authentication_plugin is not defined

@@ -1,3 +1,3 @@
 ---
-- name: Ensure OS family specifi MySQL installation is done
+- name: Ensure OS family specific MySQL installation is done
   include_tasks: '{{ ansible_facts.os_family }}/done.yml'
