@@ -4,7 +4,7 @@
     dest: "{{ mysql_config_filepath }}"
     line: '[{{ item }}]'
     create: true
-  with_items:
+  loop:
     - mysqld
   become: true
 
@@ -14,6 +14,6 @@
     regexp: "^{{ item.option }}="
     line: "{{ item.option }}={{ item.value }}"
     insertafter: '^\[{{ item.section }}\]'
-  with_items:
+  loop:
     - { section: mysqld, option: default-authentication-plugin, value: '{{ mysql_authentication_plugin }}' }
   become: true

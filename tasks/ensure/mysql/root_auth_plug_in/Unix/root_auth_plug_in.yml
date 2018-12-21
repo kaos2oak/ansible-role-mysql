@@ -10,8 +10,8 @@
 
   - name: Set temporary password policy level (Unix)
     shell: "mysql -u root -p'{{ mysql_root_password }}' -e 'SET GLOBAL {{ item }};'"
-    with_items:
-      "{{ mysql_password_policy_settings[mysql_version_parts['major']|string] }}"
+    loop:
+      "{{ mysql_password_policy_settings[mysql_version_parts['major']|string]|flatten(levels=1) }}"
     when: |-
       mysql_password_policy_settings is defined and
       mysql_allow_simple_passwords

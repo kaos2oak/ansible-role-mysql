@@ -45,7 +45,7 @@
     question: '{{ item.question }}'
     value: '{{ item.answer | quote }}'
     vtype: '{{ item.vtype }}'
-  with_items:
+  loop:
     - { vtype: 'string', name: 'mysql-apt-config', question: 'mysql-apt-config/tools-component', answer: 'mysql-tools'}
     - { vtype: 'note', name: 'mysql-apt-config', question: 'mysql-apt-config/dmr-warning', answer: ''}
     - { vtype: 'string', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-url', answer: 'http://repo.mysql.com/apt'}

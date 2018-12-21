@@ -3,7 +3,7 @@
   win_lineinfile:
     dest: "{{ mysql_config_filepath }}"
     line: '[{{ item }}]'
-  with_items:
+  loop:
     - mysqld
 
 - name: Ensure MySQL config options are defined (Windows)
@@ -12,5 +12,5 @@
     regexp: "^{{ item.option }}="
     line: "{{ item.option }}={{ item.value }}"
     insertafter: '^\[{{ item.section }}\]'
-  with_items:
+  loop:
     - { section: mysqld, option: default_authentication_plugin, value: '{{ mysql_authentication_plugin }}' }
