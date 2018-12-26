@@ -14,7 +14,7 @@
       {%- if version.update({'string':mysql_version_parts['major']|string + version.string}) %}{%- endif %}
       {%- if version.update({'string':version.string + '.' + mysql_version_parts['minor']|string}) %}{%- endif %}
       {%- if version.update({'string':version.string + '.' + mysql_version_parts['patch']|string}) %}{%- endif %}
-      {%- if mysql_version_parts['extra'] != '' %}
+      {%- if mysql_version_parts['extra'] %}
       {%-   if version.update({'string':version.string + '-' + mysql_version_parts['patch']|string}) %}{%- endif %}
       {%- endif %}
       {{ version.string }}

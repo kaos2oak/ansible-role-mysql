@@ -20,4 +20,4 @@
 - name: Set facts using any 'default_mysql_' vars
   set_fact:
     "{{ item[8:] }}": "{{  vars[item[8:]] | default(vars[item]) }}"
-  loop: "{{ vars | flatten(levels=1) | select('match', '^default_mysql_') | list}}"
+  loop: "{{ vars | flatten(levels=1) | select('match', '^default_mysql_') | list }}"
