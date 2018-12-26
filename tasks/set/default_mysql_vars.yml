@@ -15,9 +15,9 @@
 - name: Define OS family-specific defaults & variables
   include_vars: "{{ ansible_facts.os_family }}/vars.yml"
 
-# code from https://www.samdarwin.com/ansible-default-vars/
-- name: Set facts using any 'default_XXX' vars
+# based on concepts found here: https://www.samdarwin.com/ansible-default-vars/
+# with a little filter magic from here: https://www.tailored.cloud/devops/how-to-filter-and-map-lists-in-ansible/
+- name: Set facts using any 'default_mysql_' vars
   set_fact:
     "{{ item[8:] }}": "{{  vars[item[8:]] | default(vars[item]) }}"
-  when: item is match("^default_")
-  loop: "{{ vars|flatten(levels=1) }}"
+  loop: "{{ vars | flatten(levels=1) | select('match', '^default_mysql_') | list}}"

@@ -1,6 +1,6 @@
 ---
-- name: Define defaults & variables
-  include_tasks: default_vars.yml
+- name: Define variables from default_mysql_ vars
+  include_tasks: default_mysql_vars.yml
 
 - name: Define values based on environment variables
   include_tasks: env_vars.yml
