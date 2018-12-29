@@ -6,20 +6,46 @@
     mode: 0777
   become: true
 
-- name: Check for installer in mysql_installers_path_on_controller (Linux)
-  stat:
-    path: "{{ mysql_installers_path_on_controller }}/{{ mysql_installer_filename }}"
-  register: mysql_installer_on_controller
-  delegate_to: 127.0.0.1
+- name: Check mysql_installers_path_on_target for installer (Linux)
+  find:
+    paths: '{{ mysql_installers_path_on_target }}'
+    recurse: false
+    patterns: '{{ mysql_installer_filename }}'
+  register: target_found
 
-- name: Copy installer to target (Linux)
-  copy:
-    src: "{{ mysql_installers_path_on_controller }}/{{ mysql_installer_filename }}"
-    dest: "{{ mysql_installers_path_on_target }}"
-  when: mysql_installer_on_controller.stat.exists == true
+- block:
 
-- name: Check for installer (Linux)
-  stat:
-    path: "{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}"
-  register: installer
-  failed_when: installer.stat.exists != true
+  - name: Find local installers (Linux)
+    find:
+      paths: '{{ mysql_local_installers_path_list }}'
+      recurse: false
+      patterns: '{{ mysql_installer_filename }}'
+    register: local_found
+    failed_when: local_found.files | length == 0
+    delegate_to: 127.0.0.1
+
+  - name: DEBUG (vv) - local installer filepaths found (Linux)
+    debug:
+      msg: "{{ local_found.files }}"
+      verbosity: 2
+
+  - name: Set mysql_local_installer_filepath (Linux)
+    set_fact:
+      mysql_local_installer_filepath: '{{ (local_found.files | first).path }}'
+
+  - name: INFO - mysql_local_installer_filepath (Linux)
+    debug:
+      var: mysql_local_installer_filepath
+
+  - name: Copy installer to target (Linux)
+    copy:
+      src: "{{ mysql_local_installer_filepath }}"
+      dest: "{{ mysql_installers_path_on_target }}"
+
+  - name: Check for installer in mysql_installers_path_on_target (Linux)
+    stat:
+      path: "{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}"
+    register: installer
+    failed_when: installer.stat.exists != true
+
+  when: target_found.files | length == 0

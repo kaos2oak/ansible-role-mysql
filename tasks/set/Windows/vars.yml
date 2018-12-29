@@ -1,7 +1,14 @@
 ---
-- name: Set mysql_installer_filename (Windows)
+- name: Define regex pattern for installer filename (Windows)
   set_fact:
-    mysql_installer_filename: 'mysql-installer-community-{{ mysql_version_string }}.0.msi'
+    mysql_installer_regex_string: "^{{ mysql_installer_name_prefix }}\
+    -{{ mysql_version_regex }}\\.0\
+    \\.{{ mysql_installer_name_ext }}"
+
+- name: DEBUG (vv) - regex pattern for installer filename (Windows)
+  debug:
+    msg: '{{ mysql_installer_regex_string }}'
+    verbosity: 2
 
 - name: Set mysql_destination_path (Windows)
   set_fact:

@@ -1,16 +1,65 @@
 ---
-- name: Create temp Ansible directory (Windows)
+- name: Ensure mysql_installers_path_on_target exists (Windows)
   win_file:
     path: "{{ mysql_installers_path_on_target }}"
     state: directory
 
-- name: Copy installer to target (Windows)
-  win_copy:
-    src: "{{ mysql_installers_path_on_controller }}/{{ mysql_installer_filename }}"
-    dest: "{{ mysql_installers_path_on_target }}\\{{ mysql_installer_filename }}"
+- name: Check mysql_installers_path_on_target for installer (Windows)
+  win_find:
+    paths: '{{ mysql_installers_path_on_target }}'
+    recurse: false
+    patterns: '{{ mysql_installer_regex_string }}'
+    use_regex: true
+  register: target_found
 
-- name: Check for installer (Windows)
-  win_stat:
-    path: "\"{{ mysql_installers_path_on_target }}\\{{ mysql_installer_filename }}\""
-  register: installer
-  failed_when: installer.stat.exists != true
+- name: Set mysql_installer_filename (Windows)
+  set_fact:
+    mysql_installer_filename: '{{ (target_found.files | first).path | basename }}'
+  when: target_found.files | length > 0
+
+- block:
+
+  - name: DEBUG (vv) - mysql_local_installers_path_list (Windows)
+    debug:
+      msg: "{{ mysql_local_installers_path_list }}"
+      verbosity: 2
+
+  - name: Find local installers (Windows)
+    find:
+      paths: '{{ mysql_local_installers_path_list }}'
+      recurse: false
+      patterns: '{{ mysql_installer_regex_string }}'
+      use_regex: true
+    register: local_found
+    failed_when: local_found.files | length == 0
+    delegate_to: 127.0.0.1
+
+  - name: DEBUG (vv) - local installer filepaths found (Windows)
+    debug:
+      msg: "{{ local_found.files }}"
+      verbosity: 2
+
+  - name: Set mysql_local_installer_filepath (Windows)
+    set_fact:
+      mysql_local_installer_filepath: '{{ (local_found.files | first).path }}'
+
+  - name: INFO - mysql_local_installer_filepath (Windows)
+    debug:
+      var: mysql_local_installer_filepath
+
+  - name: Set mysql_installer_filename (Windows)
+    set_fact:
+      mysql_installer_filename: '{{ mysql_local_installer_filepath | basename }}'
+
+  - name: Copy installer to target (Windows)
+    win_copy:
+      src: "{{ mysql_local_installer_filepath }}"
+      dest: "{{ mysql_installers_path_on_target }}\\{{ mysql_installer_filename }}"
+
+  - name: Check for installer in mysql_installers_path_on_target (Windows)
+    win_stat:
+      path: "{{ mysql_installers_path_on_target }}\\{{ mysql_installer_filename }}"
+    register: installer
+    failed_when: installer.stat.exists != true
+
+  when: target_found.files | length == 0

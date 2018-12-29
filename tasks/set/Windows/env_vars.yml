@@ -1,7 +1,14 @@
 ---
-- name: Set mysql_installers_path (Windows)
+- name: Set mysql_local_installers_path (Windows)
   set_fact:
-    mysql_installers_path: "{{ lookup('env', 'MYSQL_WINDOWS_LOCAL_INSTALLERS_PATH' ) }}"
+    mysql_local_installers_path: "{{ lookup('env', 'MYSQL_WINDOWS_LOCAL_INSTALLERS_PATH' ) }}"
   when: |-
     lookup('env', 'MYSQL_WINDOWS_LOCAL_INSTALLERS_PATH' ) is defined and
     lookup('env', 'MYSQL_WINDOWS_LOCAL_INSTALLERS_PATH' ) != ''
+
+- name: Add Windows environment variables to mysql_local_installer_path_env_vars
+  set_fact:
+    mysql_local_installer_path_env_vars: "{{ mysql_local_installer_path_env_vars }} + [ '{{ item }}' ]"
+  loop:
+    - 'WINDOWS_LOCAL_INSTALLERS_PATH'
+    - 'MYSQL_WINDOWS_LOCAL_INSTALLERS_PATH'

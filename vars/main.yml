@@ -1,2 +1,5 @@
 ---
-# vars file for ansible-role-mysql
+default_mysql_local_installer_path_env_vars:
+  - 'LOCAL_INSTALLERS_PATH'
+  - 'MYSQL_LOCAL_INSTALLERS_PATH'
+default_mysql_local_installers_path_list: ['/Users/Shared/Installers']

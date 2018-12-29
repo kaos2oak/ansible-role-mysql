@@ -4,7 +4,7 @@
 # as described at https://www.samdarwin.com/ansible-default-vars/
 
 mysql_version: 8.0.13
-mysql_installers_path_on_controller: /Users/Shared/Installers
+mysql_local_installers_path: /Users/Shared/Installers
 mysql_root_password: root
 mysql_port: 3306
 mysql_bind_address: 127.0.0.1

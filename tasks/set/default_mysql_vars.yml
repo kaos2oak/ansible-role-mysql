@@ -8,6 +8,9 @@
       Unix
       {%- endif %}
 
+- name: Define common defaults & variables
+  include_vars: main.yml
+
 - name: Define OS architecture-specific defaults & variables
   include_vars: "{{ os_architecture }}/vars.yml"
   when: os_architecture in ['Unix']
