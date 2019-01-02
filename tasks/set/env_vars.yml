@@ -21,6 +21,13 @@
   when: |-
     lookup('env', item) is defined and lookup('env', item)
 
+# The following is included to prevent a breaking change. This should be
+# removed when the next breaking change is made to the role.
+- name: Add mysql_installers_path to mysql_local_installers_path_list
+  set_fact:
+    mysql_local_installers_path_list: "[ '{{ mysql_installers_path }}' ] + {{ mysql_local_installers_path_list }}"
+  when: mysql_installers_path is defined and mysql_installers_path
+
 - name: INFO - mysql_local_installers_path_list
   debug:
     var: mysql_local_installers_path_list

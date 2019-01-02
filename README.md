@@ -56,11 +56,19 @@ computers.
 
 | Option                                | Default | Example                                  |
 | :------------------------------------ | :------ | :--------------------------------------- |
+| `MYSQL_VERSION`                       | none    | `8.0.13` or `5.7.24    `                 |
 | `MYSQL_LINUX_LOCAL_INSTALLERS_PATH`   | none    | `/Users/Shared/Installers/Linux/MySQL`   |
 | `MYSQL_MAC_LOCAL_INSTALLERS_PATH`     | none    | `/Users/Shared/Installers/macOS/MySQL`   |
 | `MYSQL_WINDOWS_LOCAL_INSTALLERS_PATH` | none    | `/Users/Shared/Installers/Windows/MySQL` |
+| `LINUX_LOCAL_INSTALLERS_PATH`         | none    | `/Users/Shared/Installers/Linux`         |
+| `MAC_LOCAL_INSTALLERS_PATH`           | none    | `/Users/Shared/Installers/macOS`         |
+| `WINDOWS_LOCAL_INSTALLERS_PATH`       | none    | `/Users/Shared/Installers/Windows`       |
 | `MYSQL_LOCAL_INSTALLERS_PATH`         | none    | `/Users/Shared/Installers/MySQL`         |
-| `MYSQL_VERSION`                       | none    | `8.0.13` or `5.7.24    `                 |
+| `LOCAL_INSTALLERS_PATH`               | none    | `/Users/Shared/Installers`               |
+
+_Note: One or more of the `INSTALLERS_PATH` environment variables may be_
+_defined and the role will search the paths in the above order until it_
+_finds an installer._
 
 ## Role Variables
 
@@ -68,15 +76,22 @@ Variables that are targeted toward options to use during the execution of the
 roles are left to be specified as role variables and can be specified in the
 playbook itself or on the command line when running the playbook.
 
-| Option                        | Default                    | Example                                                                                     |
-| :---------------------------- | :------------------------- | :------------------------------------------------------------------------------------------ |
-| `mysql_version`               | `8.0.13`                   | `5.7.24`                                                                                    |
-| `mysql_installers_path`       | `/Users/Shared/Installers` | `/Users/Shared/Installers/MySQL`                                                            |
-| `mysql_root_password`         | `root`                     | `rootp@ssW0rd`                                                                              |
-| `mysql_authentication_plugin` | MySQL version dependent    | `mysql_native_password` or `caching_sha2_password`                                          |
-| `mysql_databases`             | none                       | `testdb`                                                                                    |
-| `mysql_users`                 | none                       | `- { name: 'testuser', host: 'localhost', password: 'testpass' }`                           |
-| `mysql_user_access`           | none                       | `- { name: 'testuser', host: 'localhost', access: 'ALL', database: 'testdb', tables: '*' }` |
+| Option                             | Default                      | Example                                                                                     |
+| :--------------------------------- | :--------------------------- | :------------------------------------------------------------------------------------------ |
+| `mysql_version`                    | `8.0.13`                     | `5.7.24`                                                                                    |
+| `mysql_installers_path_list`       | [`/Users/Shared/Installers`] | [`/Users/Shared/Installers/MySQL`,`/Users/myaccount/Desktop`]                               |
+| `mysql_root_password`              | `rootP@ssw0rd`               | `eYyYQ@J3>b+2XycnUu6`                                                                       |
+| `mysql_authentication_plugin`      | MySQL version dependent      | `mysql_native_password` or `caching_sha2_password`                                          |
+| `mysql_databases`                  | none                         | `testdb`                                                                                    |
+| `mysql_users`                      | none                         | `- { name: 'testuser', host: 'localhost', password: 'testpass' }`                           |
+| `mysql_user_access`                | none                         | `- { name: 'testuser', host: 'localhost', access: 'ALL', database: 'testdb', tables: '*' }` |
+
+_Note: Using `myql_installers_path_list` might not be considered_
+_"normal usage", but is supported for use in playbooks or other scenarios in_
+_which it makes sense._
+
+_Note: Using `mysql_installers_path` is still supported, but is deprecated_
+_and will be removed with the next breaking change._
 
 ## Dependencies
 
