@@ -14,10 +14,19 @@
     use_regex: true
   register: target_found
 
+- name: Set mysql_target_installer_found (Darwin)
+  set_fact:
+    mysql_target_installer_found: |-
+      {%- if target_found.files | length > 0 %}
+      true
+      {%- else %}
+      false
+      {%- endif %}
+
 - name: Set mysql_installer_filename (Darwin)
   set_fact:
     mysql_installer_filename: '{{ (target_found.files | first).path | basename }}'
-  when: target_found.files | length > 0
+  when: mysql_target_installer_found
 
 - block:
 
@@ -28,35 +37,62 @@
       patterns: '{{ mysql_installer_regex_string }}'
       use_regex: true
     register: local_found
-    failed_when: local_found.files | length == 0
     delegate_to: 127.0.0.1
+
+  - name: Set mysql_local_installer_found (Darwin)
+    set_fact:
+      mysql_local_installer_found: |-
+        {%- if local_found.files | length > 0 %}
+        true
+        {%- else %}
+        false
+        {%- endif %}
 
   - name: DEBUG (vv) - local installer filepaths found (Darwin)
     debug:
       msg: "{{ local_found.files }}"
       verbosity: 2
+    when: mysql_local_installer_found
 
   - name: Set mysql_local_installer_filepath (Darwin)
     set_fact:
       mysql_local_installer_filepath: '{{ (local_found.files | first).path }}'
+    when: mysql_local_installer_found
 
   - name: INFO - mysql_local_installer_filepath (Darwin)
     debug:
       var: mysql_local_installer_filepath
+    when: mysql_local_installer_filepath is defined
 
   - name: Set mysql_installer_filename (Darwin)
     set_fact:
       mysql_installer_filename: '{{ mysql_local_installer_filepath | basename }}'
+    when: mysql_local_installer_filepath is defined
 
   - name: Copy installer to target (Darwin)
     copy:
       src: "{{ mysql_local_installer_filepath }}"
       dest: "{{ mysql_installers_path_on_target }}"
+    when: mysql_local_installer_filepath is defined
 
-  - name: Check for installer in mysql_installers_path_on_target (Darwin)
-    stat:
-      path: "{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}"
-    register: installer
-    failed_when: installer.stat.exists != true
+  when: not mysql_target_installer_found
 
-  when: target_found.files | length == 0
+- block:
+
+  - name: Set mysql_installer_filename (Darwin)
+    set_fact:
+      mysql_installer_filename: '{{ mysql_darwin_latest_installer_filename }}'
+    when: mysql_installer_filename is not defined
+
+  - name: Attempt to download installer (Darwin)
+    get_url:
+      url: "{{ mysql_installer_url_site }}/{{ mysql_installer_url_subpath }}/{{ mysql_installer_filename }}"
+      dest: "{{ mysql_installers_path_on_target }}"
+
+  when: not mysql_target_installer_found and not mysql_local_installer_found
+
+- name: Check for installer in mysql_installers_path_on_target (Darwin)
+  stat:
+    path: "{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}"
+  register: installer
+  failed_when: installer.stat.exists == false

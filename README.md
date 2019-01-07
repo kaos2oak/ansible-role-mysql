@@ -17,16 +17,22 @@ Important considerations before using this role:
 
 - no attempt to provide the security that would be necessary for a production
   installation has been included
-- no attempt to download the necessary installers directly from the vendor
-  has been included (you must download them yourself)
+- an attempt to download the necessary installer directly from the vendor
+  has been included (_Note: if you are trying to install a version different_
+  _from the latest version--as defined in `defaults.yml`--you will need to_
+  _provide the `mysql_installer_filename` value)_
 - the role is designed to be able to specify particular versions to be
-  installed, rather than simply "the latest"
+  installed, rather than simply "the latest" (Note: it may not be possible
+  to install a specific version on RedHat or Ubuntu while this role is using
+  the respective package managers)
 
 ## Requirements
 
 This role is currently designed to be used with a MySQL installer downloaded
 from the [MySQL web site](https://www.mysql.com) and placed locally on your
-"controller" (the machine from which you are running the Ansible playbook).
+"controller" (the machine from which you are running the Ansible playbook). If
+it cannot be found in any of the specified locations, the role will attempt to
+download the installer directlly to the targe from the vendor's site.
 
 If you are running Ansible 2.4 or above on macOS High Sierra or above, you may
 want to learn more about an issue with "changes made in High Sierra that are
@@ -76,15 +82,16 @@ Variables that are targeted toward options to use during the execution of the
 roles are left to be specified as role variables and can be specified in the
 playbook itself or on the command line when running the playbook.
 
-| Option                             | Default                      | Example                                                                                     |
-| :--------------------------------- | :--------------------------- | :------------------------------------------------------------------------------------------ |
-| `mysql_version`                    | `8.0.13`                     | `5.7.24`                                                                                    |
-| `mysql_installers_path_list`       | [`/Users/Shared/Installers`] | [`/Users/Shared/Installers/MySQL`,`/Users/myaccount/Desktop`]                               |
-| `mysql_root_password`              | `rootP@ssw0rd`               | `eYyYQ@J3>b+2XycnUu6`                                                                       |
-| `mysql_authentication_plugin`      | MySQL version dependent      | `mysql_native_password` or `caching_sha2_password`                                          |
-| `mysql_databases`                  | none                         | `testdb`                                                                                    |
-| `mysql_users`                      | none                         | `- { name: 'testuser', host: 'localhost', password: 'testpass' }`                           |
-| `mysql_user_access`                | none                         | `- { name: 'testuser', host: 'localhost', access: 'ALL', database: 'testdb', tables: '*' }` |
+| Option                        | Default                       | Example                                                                                     |
+| :---------------------------- | :---------------------------- | :------------------------------------------------------------------------------------------ |
+| `mysql_version`               | `8.0.13`                      | `5.7.24`                                                                                    |
+| `mysql_installers_path_list`  | [`/Users/Shared/Installers`]  | [`/Users/Shared/Installers/MySQL`,`/Users/myaccount/Desktop`]                               |
+| `mysql_installer_filename`    | latest platform-specific file | `mysql-8.0.12-macos10.13-x86_64.dmg`                                                        |
+| `mysql_root_password`         | `rootP@ssw0rd`                | `eYyYQ@J3>b+2XycnUu6`                                                                       |
+| `mysql_authentication_plugin` | MySQL version dependent       | `mysql_native_password` or `caching_sha2_password`                                          |
+| `mysql_databases`             | none                          | `testdb`                                                                                    |
+| `mysql_users`                 | none                          | `- { name: 'testuser', host: 'localhost', password: 'testpass' }`                           |
+| `mysql_user_access`           | none                          | `- { name: 'testuser', host: 'localhost', access: 'ALL', database: 'testdb', tables: '*' }` |
 
 _Note: Using `myql_installers_path_list` might not be considered_
 _"normal usage", but is supported for use in playbooks or other scenarios in_
@@ -205,6 +212,11 @@ provide it on the command line before the ansible-playbook run:
 Or, provide it as an "extra-vars" role variable for the ansible-playbook run:
 
     -e "mysql_version=8.0.13"
+
+And maybe the installer name, if you want the role to try to download an
+installer that is not the latest:
+
+    -e "mysql_version=8.0.12 mysql_installer_filename=mysql-8.0.12-macos10.13-x86_64.dmg"
 
 ### Example Playbook Runs
 

@@ -1,5 +1,4 @@
 ---
-default_mysql_installer_filename: mysql-apt-config_0.8.10-1_all.deb
 default_mysql_repo_codenames:
   '18': bionic
   '16': xenial

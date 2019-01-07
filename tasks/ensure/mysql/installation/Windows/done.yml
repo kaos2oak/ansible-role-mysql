@@ -1,8 +1,8 @@
 ---
 - name: Ensure MySQL Installer Console is installed (Windows)
   win_package:
-    path: "{{ mysql_installers_path_on_target }}\\{{ mysql_installer_filename }}"
-    creates_path: "C:\\Program Files (x86)\\MySQL\\MySQL Installer for Windows"
+    path: '{{ mysql_installers_path_on_target }}\{{ mysql_installer_filename }}'
+    creates_path: 'C:\Program Files (x86)\MySQL\MySQL Installer for Windows'
     state: present
 
 - name: Ensure MySQL instance is installed (Windows)

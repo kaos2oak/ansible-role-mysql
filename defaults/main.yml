@@ -11,3 +11,25 @@ mysql_bind_address: 127.0.0.1
 mysql_databases: []
 mysql_users: []
 mysql_user_access: []
+
+# Latest available for macOS/Darwin as of 2019-01-04
+# URL: https://dev.mysql.com/downloads/mysql/
+mysql_darwin_latest_installer_filename: mysql-8.0.13-macos10.14-x86_64.dmg
+
+# Latest available for Windows as of 2019-01-04
+# URL: https://dev.mysql.com/downloads/windows/installer/8.0.html
+# mysql_windows_latest_installer_filename: mysql-installer-community-8.0.13.0.msi
+
+# Latest available for Ubuntu/Debian as of 2019-01-04
+# URL: https://dev.mysql.com/downloads/repo/apt/
+mysql_debian_latest_installer_filename: mysql-apt-config_0.8.11-1_all.deb
+
+# Latest available for RedHat as of 2019-01-04
+# URL: https://dev.mysql.com/downloads/repo/yum/
+mysql_redhat_latest_installer_filenames:
+  '7': mysql80-community-release-el7-1.noarch.rpm
+  '6': mysql80-community-release-el6-1.noarch.rpm
+
+# Download location
+mysql_installer_url_site: http://dev.mysql.com/
+mysql_installer_url_subpath: get/

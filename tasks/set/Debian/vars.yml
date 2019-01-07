@@ -1,4 +1,8 @@
 ---
+- name: Use defaults intaller filename
+  set_fact:
+    mysql_installer_filename: '{{ mysql_debian_latest_installer_filename }}'
+
 - name: Set MySQL authentication plugin string (Debian)
   set_fact:
     mysql_authentication_config_string: |-
