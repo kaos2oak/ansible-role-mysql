@@ -23,7 +23,7 @@
 
 - name: Set mysql_installer_filename (Windows)
   set_fact:
-    mysql_installer_filename: '{{ (target_found.files | first).path | basename }}'
+    mysql_installer_filename: '{{ (target_found.files | first).path | win_basename }}'
   when: mysql_target_installer_found
 
 - block:
@@ -69,7 +69,7 @@
 
   - name: Set mysql_installer_filename (Windows)
     set_fact:
-      mysql_installer_filename: '{{ mysql_local_installer_filepath | basename }}'
+      mysql_installer_filename: '{{ mysql_local_installer_filepath | win_basename }}'
     when: mysql_local_installer_filepath is defined
 
   - name: Copy installer to target (Windows)
@@ -100,6 +100,6 @@
 
 - name: Check for installer in mysql_installers_path_on_target (Windows)
   win_stat:
-    path: '{{ mysql_installers_path_on_target }}\{{ mysql_installer_filename }}'
+    path: "{{ mysql_installers_path_on_target }}\\{{ mysql_installer_filename }}"
   register: installer
   failed_when: installer.stat.exists != true
