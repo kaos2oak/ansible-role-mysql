@@ -38,3 +38,8 @@
 - name: Ensure MySQL service is started (Darwin)
   become: true
   shell: '{{ mysql_start_command }}'
+
+- name: Wait for MySQL
+  wait_for:
+    path: /tmp/mysql.sock
+    timeout: 15
