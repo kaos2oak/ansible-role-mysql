@@ -3,7 +3,7 @@
 Install MySQL
 
 This role is designed to install MySQL Community Edition. The role works with
-version 8.0.13 and 5.7.24 and may work with 5.6.x, but has not been extensively
+version 8.0.15 and 5.7.25 and may work with 5.6.x, but has not been extensively
 tested on all possible major and minor versions.
 
 ## Goal
@@ -62,7 +62,7 @@ computers.
 
 | Option                                | Default | Example                                  |
 | :------------------------------------ | :------ | :--------------------------------------- |
-| `MYSQL_VERSION`                       | none    | `8.0.13` or `5.7.24    `                 |
+| `MYSQL_VERSION`                       | none    | `8.0.15` or `5.7.25    `                 |
 | `MYSQL_LINUX_LOCAL_INSTALLERS_PATH`   | none    | `/Users/Shared/Installers/Linux/MySQL`   |
 | `MYSQL_MAC_LOCAL_INSTALLERS_PATH`     | none    | `/Users/Shared/Installers/macOS/MySQL`   |
 | `MYSQL_WINDOWS_LOCAL_INSTALLERS_PATH` | none    | `/Users/Shared/Installers/Windows/MySQL` |
@@ -84,7 +84,7 @@ playbook itself or on the command line when running the playbook.
 
 | Option                        | Default                       | Example                                                                                     |
 | :---------------------------- | :---------------------------- | :------------------------------------------------------------------------------------------ |
-| `mysql_version`               | `8.0.13`                      | `5.7.24`                                                                                    |
+| `mysql_version`               | `8.0.15`                      | `5.7.25`                                                                                    |
 | `mysql_installers_path_list`  | [`/Users/Shared/Installers`]  | [`/Users/Shared/Installers/MySQL`,`/Users/myaccount/Desktop`]                               |
 | `mysql_installer_filename`    | latest platform-specific file | `mysql-8.0.12-macos10.13-x86_64.dmg`                                                        |
 | `mysql_root_password`         | `rootP@ssw0rd`                | `eYyYQ@J3>b+2XycnUu6`                                                                       |
@@ -133,19 +133,19 @@ _Note: See the `defaults.yml` file for the "default" MySQL version that will_
 _be installed by the above playbook._
 
 ``` yaml
-- name: Install MySQL 5.7.24
+- name: Install MySQL 5.7.25
     hosts: servers
     vars:
-        mysql_version: '5.7.24'
+        mysql_version: '5.7.25'
     roles:
         - { role: kaos2oak.mysql }
 ```
 
 ``` yaml
-- name: Install MySQL 5.7.24 and create mydb
+- name: Install MySQL 5.7.25 and create mydb
     hosts: servers
     vars:
-        mysql_version: '5.7.24'
+        mysql_version: '5.7.25'
         mysql_authentication_plugin: mysql_native_password
         mysql_root_password: W7HgBBja*ELuiGRrnuJ
         mysql_databases:
@@ -159,10 +159,10 @@ _be installed by the above playbook._
 ```
 
 ``` yaml
-- name: Install MySQL 8.0.13, create mydb and use the mysql_native_password auth plugin
+- name: Install MySQL 8.0.15, create mydb and use the mysql_native_password auth plugin
     hosts: servers
     vars:
-        mysql_version: '8.0.13'
+        mysql_version: '8.0.15'
         mysql_authentication_plugin: mysql_native_password
         mysql_root_password: W7HgBBja*ELuiGRrnuJ
         mysql_databases:
@@ -207,11 +207,11 @@ Since the MySQL version may be something that you want to change on the fly,
 you probably don't want to include it in the `setup` file, but you can always
 provide it on the command line before the ansible-playbook run:
 
-    export MYSQL_VERSION=5.7.24
+    export MYSQL_VERSION=5.7.25
 
 Or, provide it as an "extra-vars" role variable for the ansible-playbook run:
 
-    -e "mysql_version=8.0.13"
+    -e "mysql_version=8.0.15"
 
 And maybe the installer name, if you want the role to try to download an
 installer that is not the latest:
@@ -224,13 +224,13 @@ Assuming you have created a playbook named `k2o-mysql.yml`:
 
     ansible-playbook k2o-mysql.yml
 
-    MYSQL_VERSION=5.7.24 ansible-playbook k2o-mysql.yml
+    MYSQL_VERSION=5.7.25 ansible-playbook k2o-mysql.yml
 
-    ansible-playbook k2o-mysql.yml -e "mysql_version=5.7.24"
+    ansible-playbook k2o-mysql.yml -e "mysql_version=5.7.25"
 
 If the playbook itself contains the version of MySQL, it might look like:
 
-    ansible-playbook k2o-mysql-5.7.24.yml
+    ansible-playbook k2o-mysql-5.7.25.yml
 
 ## Role Testing
 
@@ -274,7 +274,7 @@ specify the mysql_version like this:
     provisioner:
       name: ansible
       env:
-        MYSQL_VERSION: 5.7.24
+        MYSQL_VERSION: 5.7.25
 
 ### Default Tests
 
@@ -288,7 +288,7 @@ Ubuntu 18 & 16 via vagrant:
 
 or
 
-    MYSQL_VERSION=5.7.24 molecule test --scenario-name ubuntu-vagrant
+    MYSQL_VERSION=5.7.25 molecule test --scenario-name ubuntu-vagrant
 
 ### RedHat Tests
 
