@@ -1,26 +1,12 @@
 ---
-- name: Define regex pattern for installer filename (Darwin)
-  set_fact:
-    mysql_installer_regex_string: "^{{ mysql_installer_name_prefix }}\
-    -{{ mysql_version_regex }}\
-    -{{ mysql_installer_name_insert }}10\\.\\d+\
-    -{{ mysql_installer_name_suffix }}\
-    \\.{{ mysql_installer_name_ext }}"
-
-- name: DEBUG (vv) - regex pattern for installer filename (Darwin)
-  debug:
-    msg: '{{ mysql_installer_regex_string }}'
-    verbosity: 2
-
 - block:
+    - name: Set mysql_start_command (Darwin)
+      set_fact:
+        mysql_start_command: "launchctl load -F {{ mysql_launchdaemon_filepath }}"
 
-  - name: Set mysql_start_command (Darwin)
-    set_fact:
-      mysql_start_command: 'launchctl load -F {{ mysql_launchdaemon_filepath }}'
-
-  - name: Set mysql_stop_command (Darwin)
-    set_fact:
-      mysql_stop_command: 'launchctl unload -F {{ mysql_launchdaemon_filepath }}'
+    - name: Set mysql_stop_command (Darwin)
+      set_fact:
+        mysql_stop_command: "launchctl unload -F {{ mysql_launchdaemon_filepath }}"
 
   when: |-
     mysql_version_parts['major'] | int >= 8 or

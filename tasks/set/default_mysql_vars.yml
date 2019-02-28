@@ -1,13 +1,4 @@
 ---
-- name: Set os_architecture
-  set_fact:
-    os_architecture: |-
-      {%- if ansible_facts.os_family == "Windows" %}
-      Windows
-      {%- else %}
-      Unix
-      {%- endif %}
-
 - name: Define common defaults & variables
   include_vars: main.yml
 

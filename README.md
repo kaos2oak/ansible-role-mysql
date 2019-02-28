@@ -2,9 +2,8 @@
 
 Install MySQL
 
-This role is designed to install MySQL Community Edition. The role works with
-version 8.0.15 and 5.7.25 and may work with 5.6.x, but has not been extensively
-tested on all possible major and minor versions.
+This role is designed to install MySQL Community Edition versions 8.0.x and
+5.7.x.
 
 ## Goal
 
@@ -32,7 +31,7 @@ This role is currently designed to be used with a MySQL installer downloaded
 from the [MySQL web site](https://www.mysql.com) and placed locally on your
 "controller" (the machine from which you are running the Ansible playbook). If
 it cannot be found in any of the specified locations, the role will attempt to
-download the installer directlly to the targe from the vendor's site.
+download the installer directly to the target from the vendor's site.
 
 If you are running Ansible 2.4 or above on macOS High Sierra or above, you may
 want to learn more about an issue with "changes made in High Sierra that are

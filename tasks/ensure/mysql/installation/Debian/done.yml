@@ -2,7 +2,9 @@
 - name: Update apt cache (Debian)
   become: true
   apt:
-    update_cache: true
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 #One day
 
 - name: Ensure wget is installed (Debian)
   become: true
@@ -34,32 +36,102 @@
 - name: Ensure mysql_python_package is installed (Debian)
   become: true
   apt:
-    pkg: '{{ mysql_python_package }}'
+    pkg: "{{ mysql_python_package }}"
     state: present
     force: true
 
 - name: Pre-configure debconf settings (Debian)
   become: true
   debconf:
-    name: '{{ item.name }}'
-    question: '{{ item.question }}'
-    value: '{{ item.answer | quote }}'
-    vtype: '{{ item.vtype }}'
+    name: "{{ item.name }}"
+    question: "{{ item.question }}"
+    value: "{{ item.answer | quote }}"
+    vtype: "{{ item.vtype }}"
   loop:
-    - { vtype: 'string', name: 'mysql-apt-config', question: 'mysql-apt-config/tools-component', answer: 'mysql-tools'}
-    - { vtype: 'note', name: 'mysql-apt-config', question: 'mysql-apt-config/dmr-warning', answer: ''}
-    - { vtype: 'string', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-url', answer: 'http://repo.mysql.com/apt'}
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-preview', answer: 'Disabled' }
-    - { vtype: 'string', name: 'mysql-apt-config', question: 'mysql-apt-config/preview-component', answer: ''}
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/unsupported-platform', answer: 'abort' }
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-distro', answer: 'ubuntu' }
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/repo-codename', answer: "{{ mysql_repo_codenames[ansible_facts.distribution_major_version] }}" }
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-tools', answer: 'Enabled' }
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-server', answer: "mysql-{{ mysql_version_short_string }}" }
-    - { vtype: 'select', name: 'mysql-apt-config', question: 'mysql-apt-config/select-product', answer: 'Ok' }
-    - { vtype: 'select', name: 'mysql-community-server', question: 'mysql-server/default-auth-override', answer: 'Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)' }
-    - { vtype: 'password', name: 'mysql-community-server', question: 'mysql-community-server/root-pass', answer: "{{ mysql_root_password }}" }
-    - { vtype: 'password', name: 'mysql-community-server', question: 'mysql-community-server/re-root-pass', answer: "{{ mysql_root_password }}" }
+    - {
+        vtype: "string",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/tools-component",
+        answer: "mysql-tools",
+      }
+    - {
+        vtype: "note",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/dmr-warning",
+        answer: "",
+      }
+    - {
+        vtype: "string",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/repo-url",
+        answer: "http://repo.mysql.com/apt",
+      }
+    - {
+        vtype: "select",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/select-preview",
+        answer: "Disabled",
+      }
+    - {
+        vtype: "string",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/preview-component",
+        answer: "",
+      }
+    - {
+        vtype: "select",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/unsupported-platform",
+        answer: "abort",
+      }
+    - {
+        vtype: "select",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/repo-distro",
+        answer: "ubuntu",
+      }
+    - {
+        vtype: "select",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/repo-codename",
+        answer: "{{ mysql_repo_codenames[ansible_facts.distribution_major_version] }}",
+      }
+    - {
+        vtype: "select",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/select-tools",
+        answer: "Enabled",
+      }
+    - {
+        vtype: "select",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/select-server",
+        answer: "mysql-{{ mysql_version_short_string }}",
+      }
+    - {
+        vtype: "select",
+        name: "mysql-apt-config",
+        question: "mysql-apt-config/select-product",
+        answer: "Ok",
+      }
+    - {
+        vtype: "select",
+        name: "mysql-community-server",
+        question: "mysql-server/default-auth-override",
+        answer: "Use Legacy Authentication Method (Retain MySQL 5.x Compatibility)",
+      }
+    - {
+        vtype: "password",
+        name: "mysql-community-server",
+        question: "mysql-community-server/root-pass",
+        answer: "{{ mysql_root_password }}",
+      }
+    - {
+        vtype: "password",
+        name: "mysql-community-server",
+        question: "mysql-community-server/re-root-pass",
+        answer: "{{ mysql_root_password }}",
+      }
 
 - name: Install MySQL APT Repository (Debian)
   become: true
