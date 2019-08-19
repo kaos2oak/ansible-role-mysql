@@ -2,9 +2,10 @@
 - name: Update apt cache (Debian)
   become: true
   apt:
-    upgrade: yes
     update_cache: yes
     cache_valid_time: 86400 #One day
+    force_apt_get: true
+    # https://github.com/ansible/ansible/issues/56832
 
 - name: Ensure wget is installed (Debian)
   become: true
