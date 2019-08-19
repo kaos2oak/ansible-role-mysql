@@ -1,8 +1,9 @@
 ---
-default_mysql_allow_simple_passwords: true
+default_mysql_allow_simple_passwords: false
 default_mysql_config_filepath: /etc/my.cnf
 default_mysql_service_name: mysqld
 default_mysql_executable_path: /usr/bin
+default_mysql_initial_root_password_blank: true
 
 default_mysql_password_policy_settings:
   '8':

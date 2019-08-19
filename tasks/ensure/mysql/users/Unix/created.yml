@@ -1,11 +1,16 @@
 ---
-- name: Set temporary password policy level (Unix)
-  shell: "mysql -u root -p'{{ mysql_root_password }}' -e 'SET GLOBAL {{ item }};'"
-  loop:
-    "{{ mysql_password_policy_settings[mysql_version_parts['major']|string]|flatten(levels=1) }}"
-  when: |-
-    mysql_password_policy_settings is defined and
-    mysql_allow_simple_passwords
+- block:
+
+  - name: Set temporary password policy level (Unix)
+    shell: "mysql -u root -p'{{ mysql_root_password }}' -e 'SET GLOBAL {{ item }};'"
+    loop:
+      "{{ mysql_password_policy_settings[mysql_version_parts['major']|string]|flatten(levels=1) }}"
+    when: |-
+      mysql_password_policy_settings is defined and
+      mysql_allow_simple_passwords
+
+  when: ansible_facts.os_family != 'RedHat' or
+        ansible_facts.distribution_major_version | int < 8
 
 - name: Create users (Unix)
   shell: "{{ mysql_executable_path }}/mysql \
