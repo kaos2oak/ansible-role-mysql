@@ -4,7 +4,9 @@
     mysql_installer_platform_version: |-
       {%- if mysql_version_parts['major'] | int >= 8 %}
       {%-   if mysql_version_parts['minor'] | int >= 0 %}
-      {%-     if mysql_version_parts['patch'] | int > 12 %}
+      {%-     if mysql_version_parts['patch'] | int > 18 %}
+      10.15
+      {%-     elif mysql_version_parts['patch'] | int > 12 %}
       10.14
       {%-     elif mysql_version_parts['patch'] | int >= 11 %}
       10.13
