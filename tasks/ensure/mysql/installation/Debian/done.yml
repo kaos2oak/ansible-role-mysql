@@ -133,6 +133,18 @@
         question: "mysql-community-server/re-root-pass",
         answer: "{{ mysql_root_password }}",
       }
+    - {
+        vtype: "password",
+        name: "mysql-community-server",
+        question: "mysql-server/root_password",
+        answer: "{{ mysql_root_password }}",
+      }
+    - {
+        vtype: "password",
+        name: "mysql-community-server",
+        question: "mysql-server/root_password_again",
+        answer: "{{ mysql_root_password }}",
+      }
 
 - name: Install MySQL APT Repository (Debian)
   become: true
