@@ -3,7 +3,7 @@
 # The processing of these values to function more like defaults is done
 # as described at https://www.samdarwin.com/ansible-default-vars/
 
-mysql_version: 8.0.19
+mysql_version: 8.0.23
 mysql_root_password: rootP@ssw0rd
 mysql_port: 3306
 mysql_bind_address: 127.0.0.1
@@ -12,19 +12,19 @@ mysql_databases: []
 mysql_users: []
 mysql_user_access: []
 
-# Latest available for macOS/Darwin as of 2020-02-19
+# Latest available for macOS/Darwin as of 2021-02-01
 # URL: https://dev.mysql.com/downloads/mysql/
-mysql_darwin_latest_installer_filename: mysql-8.0.19-macos10.15-x86_64.dmg
+mysql_darwin_latest_installer_filename: mysql-8.0.23-macos10.15-x86_64.dmg
 
-# Latest available for Windows as of 2020-02-19
+# Latest available for Windows as of 2021-02-01
 # URL: https://dev.mysql.com/downloads/windows/installer/8.0.html
-# mysql_windows_latest_installer_filename: mysql-installer-community-8.0.19.0.msi
+# mysql_windows_latest_installer_filename: mysql-installer-community-8.0.23.0.msi
 
-# Latest available for Ubuntu/Debian as of 22020-02-19
+# Latest available for Ubuntu/Debian as of 2021-02-01
 # URL: https://dev.mysql.com/downloads/repo/apt/
-mysql_debian_latest_installer_filename: mysql-apt-config_0.8.14-1_all.deb
+mysql_debian_latest_installer_filename: mysql-apt-config_0.8.16-1_all.deb
 
-# Latest available for RedHat as of 2020-02-19
+# Latest available for RedHat as of 2021-02-01
 # URL: https://dev.mysql.com/downloads/repo/yum/
 mysql_redhat_latest_installer_filenames:
   '8': mysql80-community-release-el8-1.noarch.rpm
