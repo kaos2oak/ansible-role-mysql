@@ -26,6 +26,7 @@ galaxy_info:
         - '10.13'
         - '10.14'
         - '10.15'
+        - '11'
     - name: Windows
       versions:
         - '2012R2'
