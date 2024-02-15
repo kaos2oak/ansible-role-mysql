@@ -1,4 +1,9 @@
 ---
+- name: Add an apt key by id from a keyserver
+  ansible.builtin.apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: B7B3B788A8D3785C
+
 - name: Update apt cache (Debian)
   become: true
   apt:

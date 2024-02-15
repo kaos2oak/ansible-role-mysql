@@ -27,10 +27,11 @@ mysql_debian_latest_installer_filename: mysql-apt-config_0.8.22-1_all.deb
 # Latest available for RedHat as of 2022-02-04
 # URL: https://dev.mysql.com/downloads/repo/yum/
 mysql_redhat_latest_installer_filenames:
-  "8": mysql80-community-release-el8-3.noarch.rpm
+  "9": mysql80-community-release-el9-5.noarch.rpm
+  "8": mysql80-community-release-el8-9.noarch.rpm
   "7": mysql80-community-release-el7-5.noarch.rpm
   "6": mysql80-community-release-el6-5.noarch.rpm
 
 # Download location
-mysql_installer_url_site: https://dev.mysql.com
-mysql_installer_url_subpath: get
+mysql_installer_url_site: https://repo.mysql.com
+mysql_installer_url_subpath:

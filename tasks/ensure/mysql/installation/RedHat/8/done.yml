@@ -1,12 +1,17 @@
 ---
-- name: Install MySQL (RedHat 8)
+- name: Add MySQL Repo (RedHat)
   become: true
   yum:
-    name: '@mysql:8.0'
-    state: installed
-    # update_cache: true
+    name: '{{ mysql_installers_path_on_target }}/{{ mysql_installer_filename }}'
+    state: present
 
-- name: Ensure MySQL service is started (RedHat 8)
+- name: Install MySQL (RedHat)
+  become: true
+  yum:
+    name: mysql-community-server
+    state: installed
+
+- name: Ensure MySQL service is started (RedHat)
   become: true
   service:
     name: '{{ mysql_service_name }}'
